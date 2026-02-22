@@ -1,1 +1,1 @@
-# Prueba_2
+# nuevo registro de inventario 2026
