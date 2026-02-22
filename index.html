@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Inventario 📝</title>
+    <title>Registro de Inventario �</title>
     <style>
         /* General Styles */
         body {
@@ -109,28 +109,45 @@
     <div class="form-container">
         <div class="form-title">
             <span>Registro de Inventario</span>
-            <span>📝</span>
+            <span>�</span>
         </div>
-        <form>
+        <form id="inventory-form">
             <div class="form-group">
                 <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <select id="nombre" name="nombre" required>
+                    <option value="">Seleccionar nombre</option>
+                    <option value="Fernando Moreno">Fernando Moreno</option>
+                    <option value="Humberto Huerta">Humberto Huerta</option>
+                    <option value="Christian Molina">Christian Molina</option>
+                    <option value="Jose Zapata">Jose Zapata</option>
+                    <option value="Orlando Ibarra">Orlando Ibarra</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="area">Área</label>
-                <input type="text" id="area" name="area" required>
+                <select id="area" name="area" required>
+                    <option value="">Seleccionar área</option>
+                    <option value="Rampa 1 (GIM)">Rampa 1 (GIM)</option>
+                    <option value="Rampa 2 (GE)">Rampa 2 (GE)</option>
+                    <option value="Rampa 3 (GB)">Rampa 3 (GB)</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="codigo">Código</label>
-                <input type="number" id="codigo" name="codigo" required>
+                <select id="codigo" name="codigo" required>
+                    <option value="">Seleccionar código</option>
+                    <option value="122">122</option>
+                    <option value="130">130</option>
+                </select>
+                <div class="error-message" id="codigo-error">Código no válido</div>
             </div>
             <div class="form-group">
                 <label for="producto">Producto</label>
-                <input type="text" id="producto" name="producto" required>
+                <input type="text" id="producto" name="producto" readonly>
             </div>
             <div class="form-group">
                 <label for="tt">TT</label>
-                <input type="text" id="tt" name="tt" required>
+                <input type="text" id="tt" name="tt" readonly>
             </div>
             <div class="form-group">
                 <label for="cilindros">Cilindros</label>
@@ -138,6 +155,41 @@
             </div>
             <button type="submit">Enviar</button>
         </form>
+
+        <script>
+            const codigoData = {
+                "122": { producto: "Dewar de argón", tt: "Argón" },
+                "130": { producto: "Dewar de Oxígeno", tt: "Oxígeno" }
+            };
+
+            const codigoSelect = document.getElementById('codigo');
+            const productoInput = document.getElementById('producto');
+            const ttInput = document.getElementById('tt');
+            const codigoError = document.getElementById('codigo-error');
+
+            codigoSelect.addEventListener('change', () => {
+                const selectedCodigo = codigoSelect.value;
+
+                if (codigoData[selectedCodigo]) {
+                    productoInput.value = codigoData[selectedCodigo].producto;
+                    ttInput.value = codigoData[selectedCodigo].tt;
+
+                    productoInput.classList.add('highlight');
+                    ttInput.classList.add('highlight');
+
+                    setTimeout(() => {
+                        productoInput.classList.remove('highlight');
+                        ttInput.classList.remove('highlight');
+                    }, 1000);
+
+                    codigoError.style.display = 'none';
+                } else {
+                    productoInput.value = '';
+                    ttInput.value = '';
+                    codigoError.style.display = 'block';
+                }
+            });
+        </script>
     </div>
 </body>
 </html>
