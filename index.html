@@ -1,1 +1,221 @@
+<!-- Estilos actualizados con una gama de colores azul pastel -->
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e3f2fd; /* Azul pastel claro */
+    color: #333;
+  }
 
+  h2 {
+    text-align: center;
+    color: #1565c0; /* Azul pastel oscuro */
+    margin-top: 20px;
+  }
+
+  form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff; /* Fondo blanco para contraste */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #1565c0;
+  }
+
+  label {
+    font-weight: bold;
+    color: #0d47a1; /* Azul pastel intermedio */
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #90caf9; /* Azul pastel suave */
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #e3f2fd; /* Azul pastel claro */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  input[type="text"]:focus,
+  input[type="number"]:focus {
+    border-color: #42a5f5; /* Azul pastel más vibrante */
+    box-shadow: 0 0 5px rgba(66, 165, 245, 0.5);
+    outline: none;
+  }
+
+  input[type="submit"] {
+    grid-column: 1 / -1;
+    padding: 10px;
+    background-color: #42a5f5; /* Azul pastel vibrante */
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #1e88e5; /* Azul pastel más oscuro */
+    transform: scale(1.05);
+  }
+
+  input[type="submit"]:active {
+    background-color: #1565c0; /* Azul pastel oscuro */
+    transform: scale(0.95);
+  }
+</style>
+
+<!-- Formulario actualizado con indicadores visuales -->
+<form>
+  <h2>
+    <span style="font-size: 24px; margin-right: 10px;">📋</span>Registro de inventario
+  </h2>
+
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre">
+
+  <label for="area">Area:</label>
+  <input type="text" id="area" name="area" placeholder="Ingrese el area">
+
+  <label for="codigo">Codigo:</label>
+  <input type="number" id="codigo" name="codigo" inputmode="numeric" placeholder="Ingrese el codigo">
+
+  <label for="producto">Producto:</label>
+  <input type="text" id="producto" name="producto" placeholder="Ingrese el producto">
+
+  <label for="gas">Gas:</label>
+  <input type="text" id="gas" name="gas" placeholder="Ingrese el gas">
+
+  <label for="cilindros">Cilindros:</label>
+  <input type="number" id="cilindros" name="cilindros" inputmode="numeric" placeholder="Ingrese la cantidad de cilindros">
+
+  <input type="submit" value="Enviar">
+</form>
+
+<script>
+  // Autocomplete functionality for the 'nombre' field
+  const nombres = [
+    "Fernando Moreno",
+    "Humberto Huerta",
+    "Jose Zapata",
+    "Christian Molina",
+    "Orlando Ibarra",
+    "Enrique Villarreal"
+  ];
+
+  const nombreInput = document.getElementById('nombre');
+
+  nombreInput.addEventListener('input', function () {
+    const value = this.value.toLowerCase();
+    const suggestions = nombres.filter(nombre => nombre.toLowerCase().includes(value));
+
+    // Remove existing datalist if present
+    let datalist = document.getElementById('nombre-datalist');
+    if (datalist) datalist.remove();
+
+    // Create a new datalist
+    datalist = document.createElement('datalist');
+    datalist.id = 'nombre-datalist';
+    suggestions.forEach(suggestion => {
+      const option = document.createElement('option');
+      option.value = suggestion;
+      datalist.appendChild(option);
+    });
+
+    // Append the datalist to the input
+    this.setAttribute('list', 'nombre-datalist');
+    document.body.appendChild(datalist);
+  });
+
+  // Extend the autocomplete functionality to move the cursor to the 'area' field
+  const areaField = document.getElementById('area');
+
+  nombreInput.addEventListener('change', function () {
+    if (nombres.includes(this.value)) {
+      areaField.focus(); // Move the cursor to the 'area' field
+    }
+  });
+
+  // Autocomplete functionality for the 'area' field
+  const areas = [
+    "Rampa 1 (GIM)",
+    "Rampa 2 (H2)",
+    "Rampa 3 (Especiales)",
+    "Rampa 4 (Barrientos)",
+    "Rampa 5 (Co2)",
+    "Rampa 6 (Dewars)",
+    "Rampa 7 (Rack)",
+
+  ];
+
+  const areaInput = document.getElementById('area');
+
+  areaInput.addEventListener('input', function () {
+    const value = this.value.toLowerCase();
+    const suggestions = areas.filter(area => area.toLowerCase().includes(value));
+
+    // Remove existing datalist if present
+    let datalist = document.getElementById('area-datalist');
+    if (datalist) datalist.remove();
+
+    // Create a new datalist
+    datalist = document.createElement('datalist');
+    datalist.id = 'area-datalist';
+    suggestions.forEach(suggestion => {
+      const option = document.createElement('option');
+      option.value = suggestion;
+      datalist.appendChild(option);
+    });
+
+    // Append the datalist to the input
+    this.setAttribute('list', 'area-datalist');
+    document.body.appendChild(datalist);
+  });
+
+  // Move the cursor to the 'codigo' field when a matching area is selected
+  const codigoField = document.getElementById('codigo');
+
+  areaInput.addEventListener('change', function () {
+    if (areas.includes(this.value)) {
+      codigoField.focus(); // Move the cursor to the 'codigo' field
+    }
+  });
+
+  // Define the mapping of codigo to producto and gas
+  const data = {
+    122: { producto: 'Dewar de argon', gas: 'Argon' },
+    130: { producto: 'Dewar de nitrogeno', gas: 'Nitrogeno' },
+    131: { producto: 'Dewar de oxigeno', gas: 'Oxigeno' },
+    // Add more mappings as needed
+  };
+
+  // Update the fields based on the codigo value
+  document.getElementById('codigo').addEventListener('input', function () {
+    const codigo = this.value;
+    const productoField = document.getElementById('producto');
+    const gasField = document.getElementById('gas');
+    const cilindrosField = document.getElementById('cilindros');
+
+    if (data[codigo]) {
+      productoField.value = data[codigo].producto;
+      gasField.value = data[codigo].gas;
+      cilindrosField.focus(); // Move the cursor to the 'cilindros' field
+    } else {
+      productoField.value = '';
+      gasField.value = '';
+    }
+  });
+</script>
