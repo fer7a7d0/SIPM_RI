@@ -169,6 +169,9 @@ function updateTable() {
         tableContainer.appendChild(downloadButton);
     }
     downloadButton.style.display = 'block';
+
+    // Ensure the button is always below the table
+    tableContainer.appendChild(downloadButton);
 }
 
 // Edit a record
@@ -225,6 +228,10 @@ function downloadTableAsCSV() {
     const confirmDownload = confirm('¿Deseas descargar la tabla como un archivo .csv?');
     if (!confirmDownload) return;
 
+    const name = document.getElementById('name').value || 'Registro';
+    const area = document.getElementById('area').value || 'General';
+    const fileName = `${name}_${area}_tabla.csv`;
+
     const csvContent = [
         ['ID', 'Nombre', 'Área', 'Código', 'Producto', 'TT', 'Cilindros'],
         ...records.map(record => [
@@ -242,7 +249,7 @@ function downloadTableAsCSV() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', 'tabla_inventario.csv');
+    link.setAttribute('download', fileName);
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
@@ -255,6 +262,14 @@ function downloadTableAsCSV() {
     if (table) {
         tableContainer.removeChild(table);
     }
+    const downloadButton = document.getElementById('download-button');
+    if (downloadButton) {
+        downloadButton.style.display = 'none';
+    }
+    resetForm();
+}
+
+function resetForm() {
     form.reset();
-    codeInput.focus();
+    document.getElementById('name').focus();
 }
