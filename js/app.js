@@ -222,7 +222,7 @@ function deleteRecord(id) {
     }
 }
 
-// Download the table as a CSV file
+// Update the CSV file name to include the current date
 function downloadTableAsCSV() {
     if (!records.length) {
         alert('No hay datos en la tabla para descargar.');
@@ -234,7 +234,8 @@ function downloadTableAsCSV() {
 
     const name = document.getElementById('name').value || 'Registro';
     const area = document.getElementById('area').value || 'General';
-    const fileName = `${name}_${area}_tabla.csv`;
+    const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    const fileName = `${currentDate}_${name}_${area}_tabla.csv`;
 
     const csvContent = [
         ['ID', 'Fecha', 'Nombre', 'Área', 'Código', 'Producto', 'TT', 'Cilindros'],
