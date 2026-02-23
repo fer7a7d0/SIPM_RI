@@ -2,7 +2,7 @@
 const baseDatos = {
     122: { producto: "Dewar de Argón", tt: "Argón" },
     130: { producto: "Dewar de Oxígeno", tt: "Oxígeno" },
-    131: { producto: "Dewar de Nitrógeno", tt: "Oxígeno" }
+    131: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" }
 };
 
 // Referencias a los elementos del formulario
@@ -63,6 +63,7 @@ form.addEventListener('submit', (event) => {
     const product = productInput.value;
     const tt = ttInput.value;
     const cylinders = cylindersInput.value;
+    const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
     const submitButton = form.querySelector('button[type="submit"]');
 
@@ -86,6 +87,7 @@ form.addEventListener('submit', (event) => {
         // Create a new record
         const newRecord = {
             id: recordId++,
+            date: currentDate, // Add the current date
             name,
             area,
             code,
@@ -124,6 +126,7 @@ function updateTable() {
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th class="hidden">Fecha</th>
                     <th class="hidden">Nombre</th>
                     <th class="hidden">Área</th>
                     <th>Código</th>
@@ -145,6 +148,7 @@ function updateTable() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${record.id}</td>
+            <td class="hidden">${record.date}</td>
             <td class="hidden">${record.name}</td>
             <td class="hidden">${record.area}</td>
             <td>${record.code}</td>
@@ -233,9 +237,10 @@ function downloadTableAsCSV() {
     const fileName = `${name}_${area}_tabla.csv`;
 
     const csvContent = [
-        ['ID', 'Nombre', 'Área', 'Código', 'Producto', 'TT', 'Cilindros'],
+        ['ID', 'Fecha', 'Nombre', 'Área', 'Código', 'Producto', 'TT', 'Cilindros'],
         ...records.map(record => [
             record.id,
+            record.date,
             record.name,
             record.area,
             record.code,
