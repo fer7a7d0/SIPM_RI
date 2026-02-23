@@ -30,7 +30,7 @@ body {
 
 .icon {
     font-size: 1.2rem;
-    color: #007BFF;
+    color: #0056b3;
 }
 
 form {
@@ -55,12 +55,12 @@ input, select, button {
 }
 
 input:focus, select:focus {
-    border-color: #007BFF;
+    border-color: #0056b3;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 button {
-    background-color: #007BFF;
+    background-color: #0056b3;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -111,8 +111,8 @@ input[readonly] {
 }
 
 #table-container th {
-    background-color: #007BFF;
-    color: white;
+    background-color: #ffffff00;
+    color: lab(0% 0 0 / 0.966);
 }
 
 .hidden {
