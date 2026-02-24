@@ -225,3 +225,105 @@ button:active {
         padding: 8px;
     }
 }
+
+/* =========================
+   DARK MODE VARIABLES
+========================= */
+
+:root {
+    --bg-body: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    --bg-card: #ffffff;
+    --text-main: #2c5364;
+    --input-bg: #f8f9fa;
+    --table-header: #2c5364;
+    --table-text: #ffffff;
+}
+
+body.dark-mode {
+    --bg-body: #121212;
+    --bg-card: #1e1e1e;
+    --text-main: #ffffff;
+    --input-bg: #2c2c2c;
+    --table-header: #000000;
+    --table-text: #ffffff;
+}
+
+/* Apply variables */
+
+body {
+    background: var(--bg-body);
+}
+
+.form-container {
+    background: var(--bg-card);
+}
+
+.form-title {
+    color: var(--text-main);
+}
+
+input,
+select {
+    background: var(--input-bg);
+    color: var(--text-main);
+}
+
+#table-container th {
+    background: var(--table-header);
+    color: var(--table-text);
+}
+
+/* =========================
+   DARK MODE SWITCH
+========================= */
+
+.theme-toggle {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: #ccc;
+    border-radius: 25px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #007bff;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
