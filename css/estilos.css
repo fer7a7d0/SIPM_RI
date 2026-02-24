@@ -41,8 +41,10 @@ body {
 }
 
 .icon {
-    font-size: 1.2rem;
-    color: #2c5364;
+    color: var(--text-main); /* Ensure emoji color matches text for better visibility */
+    background-color: #f0f0f0; /* Light background for emojis */
+    border-radius: 50%; /* Optional: Add rounded background */
+    padding: 5px; /* Add spacing around the emoji */
 }
 
 /* =========================
@@ -79,15 +81,14 @@ select {
 
 input:focus,
 select:focus {
-    border-color: #2c5364;
-    background: #ffffff;
-    box-shadow: 0 0 8px rgba(44, 83, 100, 0.3);
+    border-color: #007bff; /* Highlight focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
     outline: none;
 }
 
 input[readonly] {
-    background-color: #e9ecef;
-    cursor: not-allowed;
+    background-color: var(--input-bg); /* Ensure consistent dark mode background */
+    color: var(--text-main); /* Ensure text is visible */
 }
 
 /* =========================
@@ -109,6 +110,7 @@ button {
 button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+    background: #0056b3; /* Darker hover effect for better contrast */
 }
 
 button:active {
@@ -152,20 +154,23 @@ button:active {
     border-collapse: collapse;
     border-radius: 12px;
     overflow: hidden;
-    background: #ffffff;
+    background: var(--table-bg); /* Use dark background for tables */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 #table-container th {
-    background: #2c5364;
-    color: #ffffff;
+    background: var(--table-header);
+    color: var(--table-text);
     padding: 12px;
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border-bottom: 1px solid #444; /* Added subtle border for better separation */
 }
 
 #table-container td {
+    background: var(--table-bg); /* Ensure consistent dark mode background */
+    color: var(--table-text); /* Ensure text contrast */
     padding: 10px;
     border-bottom: 1px solid #eee;
     font-size: 0.85rem;
@@ -242,10 +247,11 @@ button:active {
 body.dark-mode {
     --bg-body: #121212;
     --bg-card: #1e1e1e;
-    --text-main: #ffffff;
+    --text-main: #e0e0e0; /* Adjusted to avoid blending */
     --input-bg: #2c2c2c;
     --table-header: #000000;
-    --table-text: #ffffff;
+    --table-text: #e0e0e0; /* Adjusted for better contrast */
+    --table-bg: #1e1e1e; /* Added variable for table background */
 }
 
 /* Apply variables */
