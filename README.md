@@ -1,1 +1,1 @@
-# Nuevo registro de inventario 2026
+# Nuevo registro de inventario 2026 modo oscuro
