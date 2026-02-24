@@ -279,23 +279,3 @@ function resetForm() {
     form.reset();
     document.getElementById('name').focus();
 }
-
-// Toggle dark mode
-const toggle = document.getElementById("darkModeToggle");
-
-// Cargar preferencia guardada
-if (localStorage.getItem("darkMode") === "enabled") {
-    document.body.classList.add("dark-mode");
-    toggle.checked = true;
-}
-
-// Evento cambio
-toggle.addEventListener("change", () => {
-    if (toggle.checked) {
-        document.body.classList.add("dark-mode");
-        localStorage.setItem("darkMode", "enabled");
-    } else {
-        document.body.classList.remove("dark-mode");
-        localStorage.setItem("darkMode", "disabled");
-    }
-});

@@ -1,55 +1,43 @@
-/* =========================
-   GENERAL STYLES
-========================= */
-
+/* General Styles */
 body {
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    min-height: 100vh;
+    justify-content: flex-start;
+    height: auto;
+    background-color: #f0f8ff;
 }
-
-/* =========================
-   FORM CONTAINER
-========================= */
 
 .form-container {
     background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    padding: 30px;
-    width: 95%;
-    max-width: 420px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
     text-align: center;
-    transition: transform 0.3s ease;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-container:hover {
-    transform: translateY(-5px);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.15);
 }
 
 .form-title {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: #2c5364;
-    margin-bottom: 25px;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
 }
 
 .icon {
-    color: var(--text-main); /* Ensure emoji color matches text for better visibility */
-    background-color: #f0f0f0; /* Light background for emojis */
-    border-radius: 50%; /* Optional: Add rounded background */
-    padding: 5px; /* Add spacing around the emoji */
+    font-size: 1.2rem;
+    color: #0056b3;
 }
-
-/* =========================
-   FORM STRUCTURE
-========================= */
 
 form {
     display: flex;
@@ -58,69 +46,46 @@ form {
 }
 
 label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #444;
+    font-size: 0.9rem;
+    color: #555;
     text-align: left;
-    margin-bottom: -8px;
 }
 
-/* =========================
-   INPUTS & SELECTS
-========================= */
-
-input,
-select {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    background: #f8f9fa;
+input, select, button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
     transition: all 0.3s ease;
 }
 
-input:focus,
-select:focus {
-    border-color: #007bff; /* Highlight focus */
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-    outline: none;
+input:focus, select:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
-
-input[readonly] {
-    background-color: var(--input-bg); /* Ensure consistent dark mode background */
-    color: var(--text-main); /* Ensure text is visible */
-}
-
-/* =========================
-   BUTTON
-========================= */
 
 button {
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background-color: #0056b3;
     color: #fff;
     border: none;
-    border-radius: 8px;
-    padding: 12px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
-    background: #0056b3; /* Darker hover effect for better contrast */
+    background-color: #0056b3;
 }
 
 button:active {
-    transform: scale(0.97);
+    transform: scale(0.98);
 }
 
-/* =========================
-   AUTOCOMPLETE HIGHLIGHT
-========================= */
+input[readonly] {
+    background-color: #f9f9f9;
+    cursor: not-allowed;
+}
 
+/* Highlight animation for autocompleted fields */
 .highlight {
     animation: highlightFade 1s ease-in-out;
 }
@@ -134,64 +99,47 @@ button:active {
     }
 }
 
-/* =========================
-   TABLE CONTAINER
-========================= */
-
+/* Styles for the dynamic table */
 #table-container {
+    margin-top: 20px;
     width: 100%;
-    max-width: 1000px;
-    margin-top: 30px;
     overflow-x: auto;
 }
-
-/* =========================
-   TABLE STYLES
-========================= */
 
 #table-container table {
     width: 100%;
     border-collapse: collapse;
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--table-bg); /* Use dark background for tables */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    margin: 0 auto;
+}
+
+#table-container th, #table-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
 }
 
 #table-container th {
-    background: var(--table-header);
-    color: var(--table-text);
-    padding: 12px;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid #444; /* Added subtle border for better separation */
+    background-color: #ffffff00;
+    color: lab(0% 0 0 / 0.966);
 }
 
-#table-container td {
-    background: var(--table-bg); /* Ensure consistent dark mode background */
-    color: var(--table-text); /* Ensure text contrast */
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    font-size: 0.85rem;
+.hidden {
+    display: none;
 }
 
-#table-container tr:hover {
-    background-color: #f1f5f9;
-}
-
-/* =========================
-   ACTION BUTTONS
-========================= */
-
+/* Action buttons */
 .action-btn {
     cursor: pointer;
     border: none;
-    background: #f1f5f9;
-    border-radius: 6px;
-    padding: 5px 8px;
-    font-size: 1rem;
-    transition: all 0.2s ease;
+    background: none;
+    font-size: 1.2rem;
+    margin: 0 5px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: scale(1.2);
+    opacity: 0.8;
 }
 
 .action-btn.edit {
@@ -199,137 +147,5 @@ button:active {
 }
 
 .action-btn.delete {
-    color: #dc3545;
-}
-
-.action-btn:hover {
-    transform: scale(1.1);
-    background: #e2e8f0;
-}
-
-/* =========================
-   UTILITIES
-========================= */
-
-.hidden {
-    display: none;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width: 480px) {
-    .form-container {
-        padding: 20px;
-    }
-
-    #table-container th,
-    #table-container td {
-        font-size: 0.75rem;
-        padding: 8px;
-    }
-}
-
-/* =========================
-   DARK MODE VARIABLES
-========================= */
-
-:root {
-    --bg-body: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    --bg-card: #ffffff;
-    --text-main: #2c5364;
-    --input-bg: #f8f9fa;
-    --table-header: #2c5364;
-    --table-text: #ffffff;
-}
-
-body.dark-mode {
-    --bg-body: #121212;
-    --bg-card: #1e1e1e;
-    --text-main: #e0e0e0; /* Adjusted to avoid blending */
-    --input-bg: #2c2c2c;
-    --table-header: #000000;
-    --table-text: #e0e0e0; /* Adjusted for better contrast */
-    --table-bg: #1e1e1e; /* Added variable for table background */
-}
-
-/* Apply variables */
-
-body {
-    background: var(--bg-body);
-}
-
-.form-container {
-    background: var(--bg-card);
-}
-
-.form-title {
-    color: var(--text-main);
-}
-
-input,
-select {
-    background: var(--input-bg);
-    color: var(--text-main);
-}
-
-#table-container th {
-    background: var(--table-header);
-    color: var(--table-text);
-}
-
-/* =========================
-   DARK MODE SWITCH
-========================= */
-
-.theme-toggle {
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 15px;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 25px;
-}
-
-.switch input {
-    display: none;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    background-color: #ccc;
-    border-radius: 25px;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    transition: 0.4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 19px;
-    width: 19px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    border-radius: 50%;
-    transition: 0.4s;
-}
-
-input:checked + .slider {
-    background-color: #007bff;
-}
-
-input:checked + .slider:before {
-    transform: translateX(24px);
+    color: #FF0000;
 }
