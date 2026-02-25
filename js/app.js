@@ -54,6 +54,26 @@ codeInput.addEventListener('input', () => {
 });
 
 // Validación básica antes de enviar
+// 🔹 URL de tu Apps Script (reemplazar)
+const SHEETS_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
+
+// 🔹 Función para enviar datos a Google Sheets
+function enviarASheets(registro) {
+    fetch(SHEETS_URL, {
+        method: "POST",
+        body: JSON.stringify(registro),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Enviado correctamente a Sheets:", data);
+    })
+    .catch(error => {
+        console.error("Error al enviar a Sheets:", error);
+    });
+}
 form.addEventListener('submit', (event) => {
     event.preventDefault();
 
@@ -85,17 +105,23 @@ form.addEventListener('submit', (event) => {
         submitButton.textContent = 'Enviar';
     } else {
         // Create a new record
+        
         const newRecord = {
-            id: recordId++,
-            date: currentDate, // Add the current date
-            name,
-            area,
-            code,
-            product,
-            tt,
-            cylinders
-        };
-        records.push(newRecord);
+    id: recordId++,
+    date: currentDate,
+    name,
+    area,
+    code,
+    product,
+    tt,
+    cylinders
+};
+
+records.push(newRecord);
+
+// 🔥 Enviar automáticamente a Google Sheets
+enviarASheets(newRecord);
+        
     }
 
     updateTable();
