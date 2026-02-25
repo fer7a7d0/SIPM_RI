@@ -55,7 +55,7 @@ codeInput.addEventListener('input', () => {
 
 // Validación básica antes de enviar
 // 🔹 URL de tu Apps Script (reemplazar)
-const SHEETS_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwDeBWnB1hUvXxPPmOA6-ld3NheEM6UUn5p9kPMWpu03NoHYLjtbhuyu4OWv-IW-amw/exec";
 
 // 🔹 Función para enviar datos a Google Sheets
 function enviarASheets(registro) {
