@@ -61,17 +61,17 @@ const SHEETS_URL = "https://script.google.com/macros/s/AKfycbx92Cm9nINZmkzFl5FAt
 function enviarASheets(registro) {
     fetch(SHEETS_URL, {
         method: "POST",
-        body: JSON.stringify(registro),
+        mode: "no-cors",
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        body: JSON.stringify(registro)
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Enviado correctamente a Sheets:", data);
+    .then(() => {
+        console.log("Intento de envío realizado");
     })
     .catch(error => {
-        console.error("Error al enviar a Sheets:", error);
+        console.error("Error:", error);
     });
 }
 form.addEventListener('submit', (event) => {
