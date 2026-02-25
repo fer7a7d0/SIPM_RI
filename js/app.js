@@ -2,8 +2,17 @@
 const baseDatos = {
     122: { producto: "Dewar de Argón", tt: "Argón" },
     130: { producto: "Dewar de Oxígeno", tt: "Oxígeno" },
-    131: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" }
-};
+    131: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    132: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    133: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    134: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    135: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    136: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    137: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    138: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    139: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    140: { producto: "Dewar de Nitrógeno", tt: "Nitrógeno" },
+    };
 
 // Referencias a los elementos del formulario
 const codeInput = document.getElementById('code');
@@ -305,3 +314,19 @@ function resetForm() {
     form.reset();
     document.getElementById('name').focus();
 }
+
+// Generar sugerencias para el campo de código
+function generarSugerencias() {
+    const dataList = document.getElementById('code-suggestions');
+    dataList.innerHTML = ''; // Limpiar opciones previas
+
+    Object.keys(baseDatos).forEach(code => {
+        const option = document.createElement('option');
+        option.value = code; // El valor será el código
+        option.textContent = `${code} - ${baseDatos[code].producto}`; // Mostrar código y producto
+        dataList.appendChild(option);
+    });
+}
+
+// Llamar a la función al cargar la página
+document.addEventListener('DOMContentLoaded', generarSugerencias);
