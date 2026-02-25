@@ -107,20 +107,20 @@ form.addEventListener('submit', (event) => {
         // Create a new record
         
         const newRecord = {
-    id: recordId++,
-    date: currentDate,
-    name,
-    area,
-    code,
-    product,
-    tt,
-    cylinders
-};
+            id: recordId++,
+            date: currentDate,
+            name,
+            area,
+            code,
+            product,
+            tt,
+            cylinders
+    };
 
-records.push(newRecord);
+    records.push(newRecord);
 
-// 🔥 Enviar automáticamente a Google Sheets
-enviarASheets(newRecord);
+    // 🔥 Enviar automáticamente a Google Sheets
+    enviarASheets(newRecord);
         
     }
 
