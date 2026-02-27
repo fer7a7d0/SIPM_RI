@@ -107,7 +107,7 @@ form.addEventListener('submit', (event) => {
     const product = productInput.value;
     const tt = ttInput.value;
     const cylinders = cylindersInput.value;
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toLocaleDateString('en-CA'); // Formato ISO (YYYY-MM-DD)
 
     const submitButton = form.querySelector('button[type="submit"]');
 
