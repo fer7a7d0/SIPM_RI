@@ -385,3 +385,32 @@ downloadButton.addEventListener("click", () => {
     tableContainer.innerHTML = "";
     downloadButton.style.display = "none";
 });
+
+
+<!-- =========================
+     SCRIPT SCROLL INFERIOR
+========================= -->
+<script>
+const scrollBtn = document.getElementById("scrollDownBtn");
+
+// Detectar scroll de la página
+window.addEventListener("scroll", () => {
+
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const bottomPosition = document.documentElement.scrollHeight - 10;
+
+    if (scrollPosition >= bottomPosition) {
+        scrollBtn.style.display = "none";
+    } else {
+        scrollBtn.style.display = "block";
+    }
+});
+
+// Ir al final suavemente
+scrollBtn.addEventListener("click", () => {
+    window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth"
+    });
+});
+</script>
