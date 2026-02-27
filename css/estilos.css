@@ -333,13 +333,11 @@ button:active {
         background-color: #574fd6;
     }
 
-    table {
+    table,
+    th,
+    td {
         background-color: #2a2a3d;
         color: #f1f1f1;
-    }
-
-    th {
-        background-color: #3f3f5a;
     }
 
     td {
