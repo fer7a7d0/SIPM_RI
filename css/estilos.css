@@ -78,7 +78,7 @@ body {
 form {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 24px; /* espacio entre formulario y tabla */
 }
 
 label {
