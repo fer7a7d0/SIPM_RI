@@ -262,28 +262,34 @@ button:active {
     background-color: #0056b3;
 }
 
+
 /* =========================
-   BOTÓN FLOTANTE SCROLL
+   BOTÓN SCROLL CENTRADO
 ========================= */
 
-.scroll-down {
+.scroll-toggle {
     position: fixed;
     bottom: 20px;
-    right: 20px;
-    width: 48px;
-    height: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: none;
-    background-color: #c9d9ff; /* pastel profesional */
+
+    background-color: #c9d9ff; /* pastel */
     color: #2c2c2c;
     font-size: 22px;
     cursor: pointer;
+
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: none;
-    transition: opacity 0.3s ease, transform 0.2s ease;
+
+    transition: all 0.3s ease;
     z-index: 1000;
 }
 
-.scroll-down:hover {
-    transform: scale(1.1);
+.scroll-toggle:hover {
+    transform: translateX(-50%) scale(1.1);
 }
