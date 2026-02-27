@@ -296,51 +296,45 @@ button:active {
 
 
 /* ============================= */
-/* 🌙 MODO OSCURO AUTOMÁTICO */
+/* 🌙 TABLA PROFESIONAL OSCURA */
 /* ============================= */
 
-@media (prefers-color-scheme: dark) {
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2a2a3d;
+    color: #f1f1f1;
+    transition: 0.3s ease;
+}
 
-    body {
-        background-color: #1e1e2f;
-        color: #f1f1f1;
-    }
+/* Encabezado */
+th {
+    background-color: #3f3f5a;
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 10px;
+    border-bottom: 2px solid #555;
+}
 
-    .contenedor,
-    .form-container {
-        background-color: #2a2a3d;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-    }
+/* Celdas */
+td {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
 
-    input,
-    select,
-    textarea {
-        background-color: #3a3a50;
-        color: #ffffff;
-        border: 1px solid #555;
-    }
+/* Filas alternadas */
+tbody tr:nth-child(even) {
+    background-color: #32324a;
+}
 
-    input::placeholder {
-        color: #bbbbbb;
-    }
+tbody tr:nth-child(odd) {
+    background-color: #2a2a3d;
+}
 
-    button {
-        background-color: #6c63ff;
-        color: white;
-    }
-
-    button:hover {
-        background-color: #574fd6;
-    }
-
-    table,
-    th,
-    td {
-        background-color: #2a2a3d;
-        color: #f1f1f1;
-    }
-
-    td {
-        border-color: #444;
-    }
+/* Hover elegante */
+tbody tr:hover {
+    background-color: #44446a;
+    transition: 0.2s ease-in-out;
+    cursor: pointer;
 }
