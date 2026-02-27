@@ -260,6 +260,7 @@ button:active {
 
 #download-btn:hover {
     background-color: #0056b3;
+
 }
 
 
@@ -295,46 +296,3 @@ button:active {
 }
 
 
-/* ============================= */
-/* 🌙 TABLA PROFESIONAL OSCURA */
-/* ============================= */
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #2a2a3d;
-    color: #f1f1f1;
-    transition: 0.3s ease;
-}
-
-/* Encabezado */
-th {
-    background-color: #3f3f5a;
-    color: #ffffff;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    padding: 10px;
-    border-bottom: 2px solid #555;
-}
-
-/* Celdas */
-td {
-    padding: 10px;
-    border-bottom: 1px solid #444;
-}
-
-/* Filas alternadas */
-tbody tr:nth-child(even) {
-    background-color: #32324a;
-}
-
-tbody tr:nth-child(odd) {
-    background-color: #2a2a3d;
-}
-
-/* Hover elegante */
-tbody tr:hover {
-    background-color: #44446a;
-    transition: 0.2s ease-in-out;
-    cursor: pointer;
-}
