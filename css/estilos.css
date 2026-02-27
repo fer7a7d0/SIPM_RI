@@ -261,3 +261,29 @@ button:active {
 #download-btn:hover {
     background-color: #0056b3;
 }
+
+/* =========================
+   BOTÓN FLOTANTE SCROLL
+========================= */
+
+.scroll-down {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background-color: #c9d9ff; /* pastel profesional */
+    color: #2c2c2c;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    z-index: 1000;
+}
+
+.scroll-down:hover {
+    transform: scale(1.1);
+}
