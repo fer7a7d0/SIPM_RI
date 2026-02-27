@@ -293,3 +293,56 @@ button:active {
 .scroll-toggle:hover {
     transform: translateX(-50%) scale(1.1);
 }
+
+
+/* ============================= */
+/* 🌙 MODO OSCURO AUTOMÁTICO */
+/* ============================= */
+
+@media (prefers-color-scheme: dark) {
+
+    body {
+        background-color: #1e1e2f;
+        color: #f1f1f1;
+    }
+
+    .contenedor,
+    .form-container {
+        background-color: #2a2a3d;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    }
+
+    input,
+    select,
+    textarea {
+        background-color: #3a3a50;
+        color: #ffffff;
+        border: 1px solid #555;
+    }
+
+    input::placeholder {
+        color: #bbbbbb;
+    }
+
+    button {
+        background-color: #6c63ff;
+        color: white;
+    }
+
+    button:hover {
+        background-color: #574fd6;
+    }
+
+    table {
+        background-color: #2a2a3d;
+        color: #f1f1f1;
+    }
+
+    th {
+        background-color: #3f3f5a;
+    }
+
+    td {
+        border-color: #444;
+    }
+}
