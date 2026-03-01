@@ -414,7 +414,7 @@ function generarNombreArchivo() {
     const fecha = new Date().toLocaleDateString("sv-SE"); 
     // sv-SE devuelve formato YYYY-MM-DD
 
-    const area = areaInput.value || "AREA";
+    const area = "Área " + areaInput.value || "AREA";
     const nombre = document.getElementById("name").value || "XX";
 
     const iniciales = nombre
