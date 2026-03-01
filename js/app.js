@@ -117,7 +117,8 @@ function generarOpcionesDatalist() {
     // Generar nuevas opciones basadas en la baseDatos
     Object.keys(baseDatos).forEach(code => {
         const option = document.createElement('option');
-        option.value = code;
+         option.value = code; // El valor del código
+         option.textContent = `${code} - ${baseDatos[code].producto}`; // Código y descripción
         datalist.appendChild(option);
     });
 }
@@ -196,6 +197,7 @@ form.addEventListener('submit', (event) => {
         newRecord.action = "create";
         records.push(newRecord);
         enviarASheets(newRecord);
+        codeInput.focus();
     }
 
     updateTable();
@@ -204,7 +206,8 @@ form.addEventListener('submit', (event) => {
     productInput.value = '';
     ttInput.value = '';
     cylindersInput.value = '';
-    codeInput.focus();
+    
+
 });
 
 
@@ -245,8 +248,8 @@ function updateTable() {
     const tbody = tableContainer.querySelector('tbody');
     tbody.innerHTML = '';
 
-    records.forEach(record => {
-
+    // Mostrar los registros en orden inverso
+    records.slice().reverse().forEach(record => {
         const row = document.createElement('tr');
 
         row.innerHTML = `
