@@ -23,12 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableEl     = document.getElementById('table-container');
     const downloadBtn = document.getElementById('download-btn');
     const statusEl    = document.getElementById('form-status');
+    const pendingEl   = document.getElementById('pending-indicator');
+
+    function refreshPendingIndicator() {
+        const n = SheetsService.getPendingCount();
+        pendingEl.textContent = `Pendientes por sincronizar: ${n}`;
+        pendingEl.classList.toggle('hidden', n === 0);
+        pendingEl.classList.toggle('pending-indicator--danger', n >= 10);
+    }
 
     async function drainPendingQueue() {
         const pendingBefore = SheetsService.getPendingCount();
         if (!pendingBefore) return;
 
         const result = await SheetsService.reintentarPendientes(25);
+        refreshPendingIndicator();
 
         if (!statusEl) return;
 
@@ -62,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!removed) return;
 
             const result = await SheetsService.enviar({ action: 'delete', uid: removed.uid });
+            refreshPendingIndicator();
             if (!result.ok) {
                 alert(`Eliminado localmente, pero falló backend: ${result.error}`);
             }
@@ -76,7 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ScrollController.init();
 
     // 4 — Reintentos automáticos de cola local
+    refreshPendingIndicator();
     drainPendingQueue();
     window.addEventListener('online', drainPendingQueue);
     setInterval(drainPendingQueue, 60000);
+    setInterval(refreshPendingIndicator, 3000);
 });
