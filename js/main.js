@@ -23,10 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableEl     = document.getElementById('table-container');
     const downloadBtn = document.getElementById('download-btn');
     const statusEl    = document.getElementById('form-status');
+    const pendingEl   = document.getElementById('pending-indicator');
+
+    function refreshPendingIndicator() {
+        if (!pendingEl) return;
+        const pending = SheetsService.getPendingCount();
+        pendingEl.textContent = `Pendientes por sincronizar: ${pending}`;
+        pendingEl.classList.toggle('hidden', pending === 0);
+        pendingEl.classList.toggle('pending-indicator--danger', pending >= 10);
+    }
 
     async function drainPendingQueue() {
         const pendingBefore = SheetsService.getPendingCount();
-        if (!pendingBefore) return;
+        if (!pendingBefore) {
+            refreshPendingIndicator();
+            return;
+        }
 
         const result = await SheetsService.reintentarPendientes(25);
         if (result.sent > 0 && statusEl) {
@@ -37,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusEl.className = 'form-status';
             }, 3000);
         }
+        refreshPendingIndicator();
     }
 
     // 1 — FormController se inicializa primero y expone enterEditMode
@@ -65,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             TableRenderer.render(InventoryStore.getRecords());
             downloadBtn.style.display =
                 InventoryStore.getRecords().length > 0 ? 'block' : 'none';
+            refreshPendingIndicator();
         },
     });
 
@@ -72,7 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ScrollController.init();
 
     // 4 — Reintentos automáticos de cola local
+    refreshPendingIndicator();
     drainPendingQueue();
     window.addEventListener('online', drainPendingQueue);
     setInterval(drainPendingQueue, 60000);
+    setInterval(refreshPendingIndicator, 3000);
 });

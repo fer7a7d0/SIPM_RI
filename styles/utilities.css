@@ -39,6 +39,37 @@
     padding:    8px 12px;
 }
 
+/* ---- Indicador de sincronización pendiente ------------------ */
+.pending-indicator {
+    position:      fixed;
+    top:           14px;
+    right:         14px;
+    z-index:       1100;
+    padding:       8px 12px;
+    border-radius: 999px;
+    background:    #fff4cc;
+    color:         #7c4a03;
+    border:        1px solid #f3ce6b;
+    font-size:     0.82rem;
+    font-weight:   600;
+    box-shadow:    0 2px 8px rgba(0,0,0,0.10);
+}
+
+.pending-indicator--danger {
+    background: #fee2e2;
+    border:     1px solid #fca5a5;
+    color:      #991b1b;
+}
+
+@media (max-width: 640px) {
+    .pending-indicator {
+        top:       10px;
+        right:     10px;
+        font-size: 0.76rem;
+        padding:   7px 10px;
+    }
+}
+
 /* ---- Botón flotante de scroll -------------------------------- */
 .scroll-toggle {
     position:      fixed;
