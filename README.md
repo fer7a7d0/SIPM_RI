@@ -1,1 +1,1 @@
-# Proyecto SPIM V01
+# Registro de inventario V05
