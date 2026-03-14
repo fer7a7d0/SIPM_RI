@@ -29,13 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!pendingBefore) return;
 
         const result = await SheetsService.reintentarPendientes(25);
-        if (result.sent > 0 && statusEl) {
-            statusEl.textContent = `Sincronizados ${result.sent} registros pendientes.`;
+
+        if (!statusEl) return;
+
+        if (result.discarded > 0) {
+            statusEl.textContent = `${result.discarded} registro(s) no pudieron enviarse tras varios intentos y fueron descartados. Revisa la consola.`;
+            statusEl.className = 'form-status form-status--error';
+            setTimeout(() => { statusEl.textContent = ''; statusEl.className = 'form-status'; }, 6000);
+        } else if (result.sent > 0) {
+            statusEl.textContent = `Sincronizados ${result.sent} registro(s) pendiente(s).`;
             statusEl.className = 'form-status form-status--success';
-            setTimeout(() => {
-                statusEl.textContent = '';
-                statusEl.className = 'form-status';
-            }, 3000);
+            setTimeout(() => { statusEl.textContent = ''; statusEl.className = 'form-status'; }, 3000);
         }
     }
 

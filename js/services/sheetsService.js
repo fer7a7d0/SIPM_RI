@@ -17,6 +17,9 @@ const SheetsService = (() => {
     // Clave temporal configurada para validar requests en Apps Script.
     const API_KEY = 'SIPM_RI_2026_H7mQ2xL9vNp4TzK8cFw6DsA1bR';
 
+    // Número máximo de reintentos por item antes de descartarlo.
+    const MAX_ATTEMPTS = 5;
+
     function _readQueue() {
         try {
             const raw = localStorage.getItem(QUEUE_KEY);
@@ -33,7 +36,7 @@ const SheetsService = (() => {
 
     function _enqueue(payload, error) {
         const queue = _readQueue();
-        queue.push({ payload, error: error || 'Error no especificado', ts: Date.now() });
+        queue.push({ payload, error: error || 'Error no especificado', ts: Date.now(), attempts: 1 });
         _writeQueue(queue);
         return queue.length;
     }
@@ -110,10 +113,14 @@ const SheetsService = (() => {
             // Fallback legacy: envía sin poder verificar respuesta (no-cors)
             try {
                 await _sendNoCors(payload);
+                // Fire-and-forget: también encolamos para verificar en el próximo reintento
+                const pending = _enqueue(payload, 'Enviado sin confirmación (no-cors)');
                 return {
                     ok: true,
                     unverified: true,
-                    data: { warning: 'Envío sin confirmación de respuesta (no-cors).' },
+                    queued: true,
+                    pending,
+                    data: { warning: 'Envío sin confirmación de respuesta (no-cors). En cola para verificar.' },
                 };
             } catch (fallbackErr) {
                 const pending = _enqueue(payload, fallbackErr.message || 'Error de red');
@@ -130,17 +137,18 @@ const SheetsService = (() => {
 
     /**
      * Reintenta envíos pendientes utilizando modo verificable (CORS).
-     * Mantiene en cola solo los fallidos.
+     * Mantiene en cola solo los fallidos. Descarta items que superan MAX_ATTEMPTS.
      * @param {number} [maxAttempts=20]
-     * @returns {Promise<{sent:number, remaining:number}>}
+     * @returns {Promise<{sent:number, remaining:number, discarded:number}>}
      */
     async function reintentarPendientes(maxAttempts) {
         const limit = Number.isInteger(maxAttempts) && maxAttempts > 0 ? maxAttempts : 20;
         const queue = _readQueue();
-        if (!queue.length) return { sent: 0, remaining: 0 };
+        if (!queue.length) return { sent: 0, remaining: 0, discarded: 0 };
 
         const rest = [];
         let sent = 0;
+        let discarded = 0;
 
         for (let i = 0; i < queue.length; i += 1) {
             const item = queue[i];
@@ -149,19 +157,33 @@ const SheetsService = (() => {
                     const result = await _sendWithCors(item.payload);
                     if (result.ok) {
                         sent += 1;
-                        continue;
+                        continue; // Confirmado: se elimina de la cola
                     }
-                    rest.push({ payload: item.payload, error: result.error || 'Error backend', ts: Date.now() });
+                    // Backend rechazó: incrementar contador de intentos
+                    const attempts = (item.attempts || 1) + 1;
+                    if (attempts > MAX_ATTEMPTS) {
+                        discarded += 1;
+                        console.warn('[SheetsService] Item descartado tras', MAX_ATTEMPTS, 'intentos fallidos:', item.payload, '— Último error:', result.error);
+                        continue; // Se descarta: no se agrega a rest
+                    }
+                    rest.push({ payload: item.payload, error: result.error || 'Error backend', ts: Date.now(), attempts });
                 } catch (err) {
-                    rest.push({ payload: item.payload, error: err.message || 'Error de red', ts: Date.now() });
+                    // Error de red: incrementar contador de intentos
+                    const attempts = (item.attempts || 1) + 1;
+                    if (attempts > MAX_ATTEMPTS) {
+                        discarded += 1;
+                        console.warn('[SheetsService] Item descartado tras', MAX_ATTEMPTS, 'intentos fallidos (red):', item.payload, '— Último error:', err.message);
+                        continue; // Se descarta: no se agrega a rest
+                    }
+                    rest.push({ payload: item.payload, error: err.message || 'Error de red', ts: Date.now(), attempts });
                 }
             } else {
-                rest.push(item);
+                rest.push(item); // Fuera del límite del lote: se mantiene para el próximo ciclo
             }
         }
 
         _writeQueue(rest);
-        return { sent, remaining: rest.length };
+        return { sent, remaining: rest.length, discarded };
     }
 
     return { enviar, reintentarPendientes, getPendingCount };
