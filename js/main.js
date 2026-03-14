@@ -24,6 +24,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadBtn = document.getElementById('download-btn');
     const statusEl    = document.getElementById('form-status');
 
+    async function drainPendingQueue() {
+        const pendingBefore = SheetsService.getPendingCount();
+        if (!pendingBefore) return;
+
+        const result = await SheetsService.reintentarPendientes(25);
+        if (result.sent > 0 && statusEl) {
+            statusEl.textContent = `Sincronizados ${result.sent} registros pendientes.`;
+            statusEl.className = 'form-status form-status--success';
+            setTimeout(() => {
+                statusEl.textContent = '';
+                statusEl.className = 'form-status';
+            }, 3000);
+        }
+    }
+
     // 1 — FormController se inicializa primero y expone enterEditMode
     const { enterEditMode } = FormController.init(form, {
         downloadButton: downloadBtn,
@@ -38,10 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (record) enterEditMode(record);
         },
 
-        onDelete: id => {
+        onDelete: async id => {
             const removed = InventoryStore.deleteRecord(id);
             if (!removed) return;
-            SheetsService.enviar({ action: 'delete', uid: removed.uid });
+
+            const result = await SheetsService.enviar({ action: 'delete', uid: removed.uid });
+            if (!result.ok) {
+                alert(`Eliminado localmente, pero falló backend: ${result.error}`);
+            }
+
             TableRenderer.render(InventoryStore.getRecords());
             downloadBtn.style.display =
                 InventoryStore.getRecords().length > 0 ? 'block' : 'none';
@@ -50,4 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3 — Botón flotante de scroll
     ScrollController.init();
+
+    // 4 — Reintentos automáticos de cola local
+    drainPendingQueue();
+    window.addEventListener('online', drainPendingQueue);
+    setInterval(drainPendingQueue, 60000);
 });

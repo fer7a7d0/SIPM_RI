@@ -96,6 +96,14 @@ input[readonly] {
     transition:     var(--transition);
 }
 
+.btn:disabled {
+    opacity:        0.65;
+    cursor:         not-allowed;
+    transform:      none !important;
+    box-shadow:     none !important;
+    pointer-events: none;
+}
+
 /* Botón CTA principal (Enviar / Actualizar) */
 .btn--primary {
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));

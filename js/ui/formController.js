@@ -21,6 +21,8 @@ const FormController = (() => {
     let _form;
     let _downloadBtn;
     let _statusEl;
+    let _submitBtn;
+    let _isSubmitting = false;
 
     const F = {   // campos del formulario indexados por nombre
         name:      null,
@@ -105,6 +107,15 @@ const FormController = (() => {
             InventoryStore.getRecords().length > 0 ? 'block' : 'none';
     }
 
+    function _setSubmittingState(isSubmitting) {
+        _isSubmitting = isSubmitting;
+        if (!_submitBtn) return;
+        _submitBtn.disabled = isSubmitting;
+        _submitBtn.textContent = isSubmitting
+            ? 'Enviando...'
+            : (InventoryStore.getEditState().isEditing ? 'Actualizar' : 'Enviar');
+    }
+
     /* --- Modo edición ----------------------------------------- */
     function _enterEditMode(record) {
         const card = _form.closest('.form-container');
@@ -134,53 +145,77 @@ const FormController = (() => {
     }
 
     /* --- Submit único ----------------------------------------- */
-    function _handleSubmit(e) {
+    async function _handleSubmit(e) {
         e.preventDefault();
 
-        const data  = _readFormData();
-        const error = Validators.validateFormData(data);
-        if (error) {
-            _setStatus(error, true);
-            return;
-        }
+        if (_isSubmitting) return;
+        _setSubmittingState(true);
 
-        const { isEditing, editingRecordId } = InventoryStore.getEditState();
-        let highlightId = null;
+        try {
 
-        if (isEditing && editingRecordId !== null) {
-            /* ---- UPDATE ---- */
-            const updated = InventoryStore.updateRecord(editingRecordId, data);
-            if (updated) {
-                SheetsService.enviar({ ...updated, action: 'update' });
-                highlightId = updated.id;
-                _setStatus('Registro actualizado correctamente.');
+            const data  = _readFormData();
+            const error = Validators.validateFormData(data);
+            if (error) {
+                _setStatus(error, true);
+                return;
             }
-            _exitEditMode();
 
-        } else {
-            /* ---- CREATE ---- */
-            const newRecord = {
-                id:   InventoryStore.getNextId(),
-                uid:  generarUID(),
-                date: new Date().toLocaleDateString('en-CA'),
-                ...data,
-            };
-            InventoryStore.addRecord(newRecord);
-            SheetsService.enviar({ ...newRecord, action: 'create' });
-            _setStatus('Registro guardado.');
-        }
+            const { isEditing, editingRecordId } = InventoryStore.getEditState();
+            let highlightId = null;
 
-        TableRenderer.render(InventoryStore.getRecords());
+            if (isEditing && editingRecordId !== null) {
+                /* ---- UPDATE ---- */
+                const updated = InventoryStore.updateRecord(editingRecordId, data);
+                if (updated) {
+                    const result = await SheetsService.enviar({ ...updated, action: 'update' });
+                    highlightId = updated.id;
+                    if (result.ok && result.unverified) {
+                        _setStatus('Actualizado localmente. Envío remoto sin confirmación.');
+                    } else if (result.ok) {
+                        _setStatus('Registro actualizado y confirmado en backend.');
+                    } else if (result.queued) {
+                        _setStatus(`Actualizado local. Sin red; en cola (${result.pending} pendientes).`, true);
+                    } else {
+                        _setStatus(`Actualizado localmente, pero falló backend: ${result.error}`, true);
+                    }
+                }
+                _exitEditMode();
 
-        if (highlightId !== null) {
-            TableRenderer.scrollToRow(highlightId);
-        }
+            } else {
+                /* ---- CREATE ---- */
+                const newRecord = {
+                    id:   InventoryStore.getNextId(),
+                    uid:  generarUID(),
+                    date: new Date().toLocaleDateString('en-CA'),
+                    ...data,
+                };
+                InventoryStore.addRecord(newRecord);
+                const result = await SheetsService.enviar({ ...newRecord, action: 'create' });
+                if (result.ok && result.unverified) {
+                    _setStatus('Guardado local. Envío remoto sin confirmación.');
+                } else if (result.ok) {
+                    _setStatus('Registro guardado y confirmado en backend.');
+                } else if (result.queued) {
+                    _setStatus(`Guardado local. Sin red; en cola (${result.pending} pendientes).`, true);
+                } else {
+                    _setStatus(`Guardado local, pero falló backend: ${result.error}`, true);
+                }
+            }
 
-        _syncDownloadBtn();
-        _clearCodeFields();
+            TableRenderer.render(InventoryStore.getRecords());
 
-        if (!isEditing) {
-            F.code.focus();
+            if (highlightId !== null) {
+                TableRenderer.scrollToRow(highlightId);
+            }
+
+            _syncDownloadBtn();
+            _clearCodeFields();
+
+            if (!isEditing) {
+                F.code.focus();
+            }
+        } finally {
+            _setSubmittingState(false);
         }
     }
 
@@ -214,6 +249,7 @@ const FormController = (() => {
         _form        = formEl;
         _downloadBtn = downloadButton;
         _statusEl    = statusElement;
+        _submitBtn   = _form.querySelector('button[type="submit"]');
 
         F.name      = document.getElementById('name');
         F.area      = document.getElementById('area');
