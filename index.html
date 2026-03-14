@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Registro de inventario de gases industriales y medicinales – SIPM">
+    <title>Inventario de Gases SIPM</title>
+    <link rel="icon" type="image/png" href="../img/logo-sipm.png">
+
+    <!--
+        Estilos en 3 capas:
+          1. base.css       → variables, reset, body
+          2. components.css → formulario, tabla, botones
+          3. utilities.css  → helpers, animaciones, scroll
+    -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/utilities.css">
+</head>
+
+<body>
+
+    <!-- =========================================================
+         CONTENIDO PRINCIPAL
+    ========================================================== -->
+    <main class="form-container">
+
+        <!-- Encabezado de la página -->
+        <header>
+            <h1 class="form-title">
+                <img src="img/logo-sipm.png"
+                     alt="Logo SIPM"
+                     class="form-title__logo">
+                Inventario (Gases)
+            </h1>
+        </header>
+
+        <!-- =====================================================
+             FORMULARIO DE REGISTRO
+        ====================================================== -->
+        <section aria-labelledby="form-heading">
+            <h2 id="form-heading" class="hidden">Formulario de registro</h2>
+
+            <form id="inventory-form" class="inventory-form" novalidate>
+
+                <!-- Nombre del operador -->
+                <label for="name">Nombre</label>
+                <select id="name" name="name" required autocomplete="off">
+                    <option value="">Seleccionar nombre</option>
+                    <option value="Christian Molina">Christian Molina</option>
+                    <option value="Fernando Moreno">Fernando Moreno</option>
+                    <option value="Humberto Huerta">Humberto Huerta</option>
+                    <option value="Jose Zapata">Jose Zapata</option>
+                    <option value="Orlando Ibarra">Orlando Ibarra</option>
+                    <option value="Enrique Villarreal">Enrique Villarreal</option>
+                </select>
+
+                <!-- Área de trabajo -->
+                <label for="area">Área</label>
+                <select id="area" name="area" required autocomplete="off">
+                    <option value="">Seleccionar área</option>
+                    <option value="1. GIM">1. GIM</option>
+                    <option value="2. Pared">2. Pared</option>
+                    <option value="3. Acetileno">3. Acetileno</option>
+                    <option value="4. Hidrógeno">4. Hidrógeno</option>
+                    <option value="5. GEM">5. GEM</option>
+                    <option value="6. GB">6. GB</option>
+                    <option value="7. CO2">7. CO2</option>
+                    <option value="8. Dewars">8. Dewars</option>
+                </select>
+
+                <!-- Código del producto — activa autocompletado -->
+                <label for="code">Código</label>
+                <input type="tel"
+                       id="code"
+                       name="code"
+                       list="code-suggestions"
+                       pattern="[0-9]*"
+                       inputmode="numeric"
+                       autocomplete="off"
+                       required>
+                <datalist id="code-suggestions"></datalist>
+
+                <!-- TT y Producto: campos de solo lectura, se llenan automáticamente -->
+                <label for="tt">TT (Materia prima)</label>
+                <input type="text"
+                       id="tt"
+                       name="tt"
+                       readonly
+                       aria-readonly="true"
+                       placeholder="Se completa automáticamente">
+
+                <label for="product">Producto</label>
+                <input type="text"
+                       id="product"
+                       name="product"
+                       readonly
+                       aria-readonly="true"
+                       placeholder="Se completa automáticamente">
+
+                <!-- Cantidad de cilindros -->
+                <label for="cylinders">Cilindros</label>
+                <input type="tel"
+                       id="cylinders"
+                       name="cylinders"
+                       pattern="[0-9]*"
+                       inputmode="numeric"
+                       autocomplete="off"
+                       required>
+
+                <!-- Feedback accesible (aria-live) -->
+                <div id="form-status"
+                     class="form-status"
+                     role="status"
+                     aria-live="polite"
+                     aria-atomic="true"></div>
+
+                <button type="submit" class="btn btn--primary">Enviar</button>
+
+            </form>
+        </section>
+
+        <!-- =====================================================
+             TABLA DE REGISTROS DEL TURNO
+        ====================================================== -->
+        <section aria-labelledby="records-heading">
+            <h2 id="records-heading" class="hidden">Registros del turno</h2>
+            <div id="table-container"
+                 role="region"
+                 aria-label="Tabla de registros del turno"></div>
+        </section>
+
+        <!-- Botón de exportación CSV (visible solo cuando hay registros) -->
+        <button id="download-btn" class="btn btn--download" type="button" style="display:none;">
+            Descargar CSV
+        </button>
+
+    </main>
+
+
+    <!-- =========================================================
+         BOTÓN FLOTANTE DE NAVEGACIÓN
+    ========================================================== -->
+    <button id="scrollToggleBtn"
+            class="scroll-toggle"
+            type="button"
+            aria-label="Ir al final de la página">↓</button>
+
+
+    <!-- =========================================================
+         SCRIPTS — cargados en orden de dependencias
+         (sin type="module" para compatibilidad con file://)
+    ========================================================== -->
+
+    <!-- 1. Datos -->
+    <script src="js/data/catalogoCodigos.js"></script>
+    <script src="js/data/materiasPrimas.js"></script>
+
+    <!-- 2. Servicios y estado -->
+    <script src="js/services/sheetsService.js"></script>
+    <script src="js/state/inventoryStore.js"></script>
+
+    <!-- 3. Utilidades -->
+    <script src="js/utils/uid.js"></script>
+    <script src="js/utils/dom.js"></script>
+    <script src="js/utils/validators.js"></script>
+    <script src="js/utils/csv.js"></script>
+
+    <!-- 4. UI -->
+    <script src="js/ui/tableRenderer.js"></script>
+    <script src="js/ui/formController.js"></script>
+    <script src="js/ui/scrollController.js"></script>
+
+    <!-- 5. Punto de entrada -->
+    <script src="js/main.js"></script>
+
+</body>
+</html>

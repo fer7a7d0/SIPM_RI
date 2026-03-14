@@ -1,0 +1,49 @@
+/* ================================================================
+   base.css  —  Variables, reset y estilos raíz
+   Cargar PRIMERO. No tiene dependencias.
+================================================================ */
+
+/* ---- Variables ----------------------------------------------- */
+:root {
+    --color-bg:           #f4f7fb;
+    --color-card:         #ffffff;
+    --color-primary:      #7da9f5;
+    --color-primary-dark: #5c8fe6;
+    --color-accent:       #a5d8ff;
+    --color-danger:       #ff9aa2;
+    --color-text:         #2e2e2e;
+    --color-muted:        #6b7280;
+    --color-border:       #e5e7eb;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+
+    --shadow-soft:  0 4px 12px rgba(0,0,0,0.06);
+    --shadow-hover: 0 8px 20px rgba(0,0,0,0.08);
+
+    --transition: all 0.25s ease;
+}
+
+/* ---- Reset ---------------------------------------------------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin:     0;
+    padding:    0;
+}
+
+/* ---- Cuerpo --------------------------------------------------- */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background:  var(--color-bg);
+    color:       var(--color-text);
+    padding:     16px;
+    display:     flex;
+    flex-direction: column;
+    align-items: center;
+    min-height:  100vh;
+}
+
+@media (min-width: 768px) {
+    body { padding: 40px; }
+}
