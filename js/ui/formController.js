@@ -213,7 +213,7 @@ const FormController = (() => {
             _clearCodeFields();
 
             /*if (!isEditing) {
-                /*F.code.focus();
+                F.code.focus();/*
             }
         } finally {
             _setSubmittingState(false);
