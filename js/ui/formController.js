@@ -212,8 +212,8 @@ const FormController = (() => {
             _syncDownloadBtn();
             _clearCodeFields();
 
-            /*if (!isEditing) {
-                /*F.code.focus();
+            if (!isEditing) {
+                F.code.focus();
             }
         } finally {
             _setSubmittingState(false);
