@@ -15,6 +15,18 @@
     --color-muted:        #6b7280;
     --color-border:       #e5e7eb;
 
+    --color-input-bg:         #ffffff;
+    --color-readonly-bg:      #f9fafb;
+    --color-table-even:       #f9fbff;
+    --color-table-hover:      #eef4ff;
+    --color-success-text:     #166534;
+    --color-success-bg:       #dcfce7;
+    --color-error-text:       #991b1b;
+    --color-error-bg:         #fee2e2;
+    --color-highlight-start:  #dbeafe;
+    --color-scroll-btn:       #c9d9ff;
+    --color-scroll-btn-text:  #ffffff;
+
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 18px;
@@ -23,6 +35,35 @@
     --shadow-hover: 0 8px 20px rgba(0,0,0,0.08);
 
     --transition: all 0.25s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg:           #0f172a;
+        --color-card:         #111827;
+        --color-primary:      #60a5fa;
+        --color-primary-dark: #3b82f6;
+        --color-accent:       #38bdf8;
+        --color-danger:       #fda4af;
+        --color-text:         #e5e7eb;
+        --color-muted:        #9ca3af;
+        --color-border:       #334155;
+
+        --color-input-bg:         #0b1220;
+        --color-readonly-bg:      #1e293b;
+        --color-table-even:       #0b1220;
+        --color-table-hover:      #1e293b;
+        --color-success-text:     #bbf7d0;
+        --color-success-bg:       #14532d;
+        --color-error-text:       #fecaca;
+        --color-error-bg:         #7f1d1d;
+        --color-highlight-start:  #1d4ed8;
+        --color-scroll-btn:       #334155;
+        --color-scroll-btn-text:  #e5e7eb;
+
+        --shadow-soft:  0 4px 14px rgba(0,0,0,0.35);
+        --shadow-hover: 0 10px 24px rgba(0,0,0,0.45);
+    }
 }
 
 /* ---- Reset ---------------------------------------------------- */
@@ -37,6 +78,7 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background:  var(--color-bg);
     color:       var(--color-text);
+    color-scheme: light dark;
     padding:     16px;
     display:     flex;
     flex-direction: column;

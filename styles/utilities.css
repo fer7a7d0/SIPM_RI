@@ -14,7 +14,7 @@
 }
 
 @keyframes highlightFade {
-    from { background-color: #dbeafe; }
+    from { background-color: var(--color-highlight-start); }
     to   { background-color: transparent; }
 }
 
@@ -28,14 +28,14 @@
 }
 
 .form-status--success {
-    color:      #166534;
-    background: #dcfce7;
+    color:      var(--color-success-text);
+    background: var(--color-success-bg);
     padding:    8px 12px;
 }
 
 .form-status--error {
-    color:      #991b1b;
-    background: #fee2e2;
+    color:      var(--color-error-text);
+    background: var(--color-error-bg);
     padding:    8px 12px;
 }
 
@@ -51,8 +51,8 @@
     border-radius: 50%;
     border:        none;
 
-    background-color: #c9d9ff;
-    color:            #ffffff;
+    background-color: var(--color-scroll-btn);
+    color:            var(--color-scroll-btn-text);
     font-size:        22px;
     cursor:           pointer;
     box-shadow:       0 4px 12px rgba(0,0,0,0.15);

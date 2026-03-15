@@ -65,7 +65,8 @@ select {
     border-radius: var(--radius-sm);
     font-size:     0.95rem;
     border:        1px solid var(--color-border);
-    background:    #ffffff;
+    background:    var(--color-input-bg);
+    color:         var(--color-text);
     transition:    var(--transition);
 }
 
@@ -77,7 +78,7 @@ select:focus {
 }
 
 input[readonly] {
-    background: #f9fafb;
+    background: var(--color-readonly-bg);
     cursor:     not-allowed;
     color:      var(--color-muted);
 }
@@ -107,7 +108,7 @@ input[readonly] {
 /* Botón CTA principal (Enviar / Actualizar) */
 .btn--primary {
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    color:      #ffffff;
+    color:      var(--color-scroll-btn-text);
     margin-top: 8px;
 }
 
@@ -117,7 +118,7 @@ input[readonly] {
 /* Botón de descarga CSV */
 .btn--download {
     background-color: #007BFF;
-    color:            #ffffff;
+    color:            var(--color-scroll-btn-text);
     margin-top:       15px;
 }
 
@@ -158,8 +159,8 @@ input[readonly] {
     white-space:   normal;
 }
 
-#table-container tr:nth-child(even) { background: #f9fbff; }
-#table-container tr:hover           { background: #eef4ff; }
+#table-container tr:nth-child(even) { background: var(--color-table-even); }
+#table-container tr:hover           { background: var(--color-table-hover); }
 
 /* ---- Botones de acción en tabla ----------------------------- */
 /* Clase .btn-action generada por DomUtils.createActionButton()  */
