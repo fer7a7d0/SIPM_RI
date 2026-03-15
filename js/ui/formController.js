@@ -99,6 +99,7 @@ const FormController = (() => {
             _statusEl.textContent = '';
             _statusEl.className   = 'form-status';
         }, 3500);
+        F.code.focus();
     }
 
     /* --- Sincronizar visibilidad del botón de descarga -------- */
@@ -211,8 +212,8 @@ const FormController = (() => {
             _syncDownloadBtn();
             _clearCodeFields();
 
-            if (!isEditing) {
-                F.code.focus();
+            /*if (!isEditing) {
+                /*F.code.focus();
             }
         } finally {
             _setSubmittingState(false);
