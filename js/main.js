@@ -23,32 +23,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableEl     = document.getElementById('table-container');
     const downloadBtn = document.getElementById('download-btn');
     const statusEl    = document.getElementById('form-status');
-    const pendingEl   = document.getElementById('pending-indicator');
-
-    function refreshPendingIndicator() {
-        const n = SheetsService.getPendingCount();
-        pendingEl.textContent = `Pendientes por sincronizar: ${n}`;
-        pendingEl.classList.toggle('hidden', n === 0);
-        pendingEl.classList.toggle('pending-indicator--danger', n >= 10);
-    }
+    let isDrainingPendingQueue = false;
 
     async function drainPendingQueue() {
+        if (isDrainingPendingQueue) return;
+
         const pendingBefore = SheetsService.getPendingCount();
         if (!pendingBefore) return;
 
-        const result = await SheetsService.reintentarPendientes(25);
-        refreshPendingIndicator();
-
-        if (!statusEl) return;
-
-        if (result.discarded > 0) {
-            statusEl.textContent = `${result.discarded} registro(s) no pudieron enviarse tras varios intentos y fueron descartados. Revisa la consola.`;
-            statusEl.className = 'form-status form-status--error';
-            setTimeout(() => { statusEl.textContent = ''; statusEl.className = 'form-status'; }, 6000);
-        } else if (result.sent > 0) {
-            statusEl.textContent = `Sincronizados ${result.sent} registro(s) pendiente(s).`;
-            statusEl.className = 'form-status form-status--success';
-            setTimeout(() => { statusEl.textContent = ''; statusEl.className = 'form-status'; }, 3000);
+        isDrainingPendingQueue = true;
+        try {
+            const result = await SheetsService.reintentarPendientes(25);
+            if (result.sent > 0 && statusEl) {
+                statusEl.textContent = `Sincronizados ${result.sent} registros pendientes.`;
+                statusEl.className = 'form-status form-status--success';
+                setTimeout(() => {
+                    statusEl.textContent = '';
+                    statusEl.className = 'form-status';
+                }, 3000);
+            }
+        } catch (err) {
+            console.error('[main] Error al reintentar pendientes:', err);
+        } finally {
+            isDrainingPendingQueue = false;
         }
     }
 
@@ -71,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!removed) return;
 
             const result = await SheetsService.enviar({ action: 'delete', uid: removed.uid });
-            refreshPendingIndicator();
             if (!result.ok) {
                 alert(`Eliminado localmente, pero falló backend: ${result.error}`);
             }
@@ -86,9 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ScrollController.init();
 
     // 4 — Reintentos automáticos de cola local
-    refreshPendingIndicator();
     drainPendingQueue();
     window.addEventListener('online', drainPendingQueue);
     setInterval(drainPendingQueue, 60000);
-    setInterval(refreshPendingIndicator, 3000);
 });
