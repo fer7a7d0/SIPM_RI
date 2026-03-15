@@ -99,6 +99,7 @@ const FormController = (() => {
             _statusEl.textContent = '';
             _statusEl.className   = 'form-status';
         }, 3500);
+        F.code.focus();
     }
 
     /* --- Sincronizar visibilidad del botón de descarga -------- */
