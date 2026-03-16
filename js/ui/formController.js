@@ -263,14 +263,7 @@ const FormController = (() => {
 
         const { name, area } = _readFormData();
         CsvUtils.descargar(csv, CsvUtils.generarNombreArchivo(area, name));
-
-        if (window.confirm('¿Deseas limpiar los registros de esta sesión?')) {
-            InventoryStore.reset();
-            TableRenderer.render([]);
-            _form.reset();
-            _syncDownloadBtn();
-            _onSyncStateChange();
-        }
+        _setStatus('CSV descargado. Puedes continuar o reiniciar sesión cuando lo necesites.');
     }
 
     /* --- API pública ------------------------------------------ */

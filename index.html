@@ -36,6 +36,14 @@
             </h1>
         </header>
 
+        <section id="session-recovery" class="session-recovery hidden" aria-live="polite">
+            <p id="session-recovery-text" class="session-recovery__text"></p>
+            <div class="session-recovery__actions">
+                <button id="resume-session-btn" type="button" class="btn btn--primary">Continuar sesión</button>
+                <button id="new-session-btn" type="button" class="btn btn--neutral">Empezar de cero</button>
+            </div>
+        </section>
+
         <!-- =====================================================
              FORMULARIO DE REGISTRO
         ====================================================== -->
@@ -109,8 +117,6 @@
                        autocomplete="off"
                        required>
 
-                <button type="submit" class="btn btn--primary">Enviar</button>
-
                        <!-- Feedback accesible (aria-live) -->
                  <div id="sync-indicator"
                      class="sync-indicator"
@@ -123,6 +129,8 @@
                      role="status"
                      aria-live="polite"
                      aria-atomic="true"></div>
+
+                <button type="submit" class="btn btn--primary">Enviar</button>
 
             </form>
         </section>
@@ -137,10 +145,16 @@
                  aria-label="Tabla de registros del turno"></div>
         </section>
 
-        <!-- Botón de exportación CSV (visible solo cuando hay registros) -->
-        <button id="download-btn" class="btn btn--download" type="button" style="display:none;">
-            Descargar CSV
-        </button>
+        <div class="session-actions">
+            <!-- Botón de exportación CSV (visible solo cuando hay registros) -->
+            <button id="download-btn" class="btn btn--download" type="button" style="display:none;">
+                Descargar CSV
+            </button>
+
+            <button id="reset-session-btn" class="btn btn--primary" type="button">
+                Reiniciar sesión
+            </button>
+        </div>
 
         <div id="toast" class="toast hidden" role="status" aria-live="polite" aria-atomic="true"></div>
 

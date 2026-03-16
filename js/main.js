@@ -22,14 +22,79 @@ document.addEventListener('DOMContentLoaded', () => {
     const form        = document.getElementById('inventory-form');
     const tableEl     = document.getElementById('table-container');
     const downloadBtn = document.getElementById('download-btn');
+    const resetBtn    = document.getElementById('reset-session-btn');
     const statusEl    = document.getElementById('form-status');
     const syncEl      = document.getElementById('sync-indicator');
+    const recoveryBox = document.getElementById('session-recovery');
+    const recoveryTxt = document.getElementById('session-recovery-text');
+    const resumeBtn   = document.getElementById('resume-session-btn');
+    const newBtn      = document.getElementById('new-session-btn');
 
     let isDrainingPendingQueue = false;
 
     function syncDownloadButton() {
         downloadBtn.style.display =
             InventoryStore.getRecords().length > 0 ? 'block' : 'none';
+    }
+
+    function hideRecoveryBanner() {
+        if (!recoveryBox) return;
+        recoveryBox.classList.add('hidden');
+    }
+
+    function resetSessionFlow() {
+        const count = InventoryStore.getRecords().length;
+        const nameField = document.getElementById('name');
+        const currentName = nameField ? nameField.value : '';
+        const confirmReset = window.confirm(
+            `Se limpiarán ${count} registro(s) locales de esta sesión. Se conservará el Nombre actual. ¿Deseas continuar?`
+        );
+        if (!confirmReset) return;
+
+        InventoryStore.reset();
+        TableRenderer.render([]);
+        form.reset();
+        if (nameField && currentName) {
+            nameField.value = currentName;
+        }
+        syncDownloadButton();
+        updateSyncIndicator();
+        hideRecoveryBanner();
+        showStatus('Sesión reiniciada. Nombre conservado; continúa desde Área.');
+
+        const areaField = document.getElementById('area');
+        if (areaField) areaField.focus();
+    }
+
+    function newSessionFlow() {
+        const count = InventoryStore.getRecords().length;
+        const confirmNew = window.confirm(
+            `Se limpiarán ${count} registro(s) y todos los datos del formulario. ¿Deseas empezar de cero?`
+        );
+        if (!confirmNew) return;
+
+        InventoryStore.reset();
+        TableRenderer.render([]);
+        form.reset();
+        syncDownloadButton();
+        updateSyncIndicator();
+        hideRecoveryBanner();
+        showStatus('Sesión nueva iniciada.');
+
+        const nameField = document.getElementById('name');
+        if (nameField) nameField.focus();
+    }
+
+    function showRecoveryBannerIfNeeded() {
+        if (!recoveryBox || !recoveryTxt) return;
+        const count = InventoryStore.getRecords().length;
+        if (!count) {
+            hideRecoveryBanner();
+            return;
+        }
+
+        recoveryTxt.textContent = `Se recuperaron ${count} registro(s) de la sesión anterior.`;
+        recoveryBox.classList.remove('hidden');
     }
 
     function showStatus(message, isError = false, timeoutMs = 3500) {
@@ -134,6 +199,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     TableRenderer.render(InventoryStore.getRecords());
     syncDownloadButton();
+    showRecoveryBannerIfNeeded();
+
+    if (resumeBtn) {
+        resumeBtn.addEventListener('click', () => {
+            const records = InventoryStore.getRecords();
+            const nameField = document.getElementById('name');
+            const areaField = document.getElementById('area');
+            const codeField = document.getElementById('code');
+
+            if (records.length > 0) {
+                const last = records[records.length - 1];
+                if (nameField && last.name) nameField.value = last.name;
+                if (areaField && last.area)  areaField.value = last.area;
+            }
+
+            hideRecoveryBanner();
+            showStatus('Sesión recuperada. Continuando desde donde lo dejaste.');
+            if (codeField) codeField.focus();
+        });
+    }
+
+    if (newBtn) {
+        newBtn.addEventListener('click', () => {
+            newSessionFlow();
+        });
+    }
+
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            resetSessionFlow();
+        });
+    }
 
     // 3 — Botón flotante de scroll
     ScrollController.init();

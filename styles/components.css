@@ -146,6 +146,42 @@ select.field-error:focus {
 .btn--download:hover  { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(125,169,245,0.35); }
 .btn--download:active { transform: scale(0.97); }
 
+.btn--neutral {
+    background: var(--color-card);
+    color:      var(--color-text);
+    border:     1px solid var(--color-border);
+}
+
+.btn--neutral:hover  { transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+.btn--neutral:active { transform: scale(0.97); }
+
+.session-actions {
+    width:       100%;
+    display:     grid;
+    gap:         10px;
+    margin-top:  12px;
+}
+
+.session-recovery {
+    width:         100%;
+    border:        1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background:    var(--color-readonly-bg);
+    padding:       12px;
+    margin-bottom: 16px;
+}
+
+.session-recovery__text {
+    font-size:   0.85rem;
+    color:       var(--color-text);
+    margin-bottom: 10px;
+}
+
+.session-recovery__actions {
+    display: grid;
+    gap:     8px;
+}
+
 /* ---- Tabla --------------------------------------------------- */
 #table-container {
     width:      100%;
