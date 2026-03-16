@@ -27,27 +27,8 @@
     to   { background-color: transparent; }
 }
 
-/* ---- Feedback de estado del formulario ----------------------- */
-.form-status {
-    min-height:    1.4rem;
-    font-size:     0.8rem;
-    border-radius: var(--radius-sm);
-    text-align:    center;
-    transition:    var(--transition);
-}
-
-.form-status--success {
-    color:      var(--color-success-text);
-    background: var(--color-success-bg);
-    padding:    8px 10px;
-}
-
-.form-status--error {
-    color:      var(--color-error-text);
-    background: var(--color-error-bg);
-    padding:    8px 10px;
-}
-
+/* ---- Feedback de estado y sincronizacion --------------------- */
+.form-status,
 .sync-indicator {
     min-height:    1.4rem;
     font-size:     0.8rem;
@@ -57,21 +38,33 @@
     border:        1px solid var(--color-border);
     color:         var(--color-muted);
     background:    var(--color-readonly-bg);
+    transition:    var(--transition);
 }
 
+.form-status:empty,
+.sync-indicator:empty {
+    display: none;
+}
+
+.form-status--success,
 .sync-indicator--ok {
-    color:      var(--color-success-text);
-    background: var(--color-success-bg);
+    color:        var(--color-success-text);
+    background:   var(--color-success-bg);
+    border-color: #86efac;
 }
 
-.sync-indicator--warning {
-    color:      #92400e;
-    background: #fef3c7;
-}
-
+.form-status--error,
 .sync-indicator--offline {
-    color:      var(--color-error-text);
-    background: var(--color-error-bg);
+    color:        var(--color-error-text);
+    background:   var(--color-error-bg);
+    border-color: #fca5a5;
+}
+
+.form-status--warning,
+.sync-indicator--warning {
+    color:        #92400e;
+    background:   #fef3c7;
+    border-color: #f59e0b;
 }
 
 .toast {
