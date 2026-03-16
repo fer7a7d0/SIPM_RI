@@ -41,11 +41,7 @@
     transition:    var(--transition);
 }
 
-.form-status:empty,
-.sync-indicator:empty {
-    display: none;
-}
-
+.form-status--ok,
 .form-status--success,
 .sync-indicator--ok {
     color:        var(--color-success-text);

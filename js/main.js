@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newBtn      = document.getElementById('new-session-btn');
 
     let isDrainingPendingQueue = false;
+    const STATUS_IDLE_TEXT = 'Listo para capturar';
 
     function syncDownloadButton() {
         downloadBtn.style.display =
@@ -105,8 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
             : 'form-status form-status--success';
 
         setTimeout(() => {
-            statusEl.textContent = '';
-            statusEl.className = 'form-status';
+            statusEl.textContent = STATUS_IDLE_TEXT;
+            statusEl.className = 'form-status form-status--ok';
         }, timeoutMs);
     }
 
@@ -200,6 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
     TableRenderer.render(InventoryStore.getRecords());
     syncDownloadButton();
     showRecoveryBannerIfNeeded();
+    if (statusEl) {
+        statusEl.textContent = STATUS_IDLE_TEXT;
+        statusEl.className = 'form-status form-status--ok';
+    }
 
     if (resumeBtn) {
         resumeBtn.addEventListener('click', () => {
