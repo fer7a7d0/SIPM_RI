@@ -123,8 +123,8 @@ const TableRenderer = (() => {
         rows.forEach(row => {
             if (row.firstElementChild && Number(row.firstElementChild.textContent) === recordId) {
                 row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                row.classList.add('highlight');
-                setTimeout(() => row.classList.remove('highlight'), 2000);
+                row.classList.add('highlight-row');
+                setTimeout(() => row.classList.remove('highlight-row'), 2000);
             }
         });
     }

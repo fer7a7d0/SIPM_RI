@@ -23,7 +23,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableEl     = document.getElementById('table-container');
     const downloadBtn = document.getElementById('download-btn');
     const statusEl    = document.getElementById('form-status');
+    const syncEl      = document.getElementById('sync-indicator');
+
     let isDrainingPendingQueue = false;
+
+    function syncDownloadButton() {
+        downloadBtn.style.display =
+            InventoryStore.getRecords().length > 0 ? 'block' : 'none';
+    }
+
+    function showStatus(message, isError = false, timeoutMs = 3500) {
+        if (!statusEl) return;
+        statusEl.textContent = message;
+        statusEl.className = isError
+            ? 'form-status form-status--error'
+            : 'form-status form-status--success';
+
+        setTimeout(() => {
+            statusEl.textContent = '';
+            statusEl.className = 'form-status';
+        }, timeoutMs);
+    }
+
+    function updateSyncIndicator() {
+        if (!syncEl) return;
+
+        const pending = SheetsService.getPendingCount();
+        const online = navigator.onLine;
+
+        let text = 'Sincronizado';
+        let variantClass = 'sync-indicator--ok';
+
+        if (!online && pending > 0) {
+            text = `Sin conexión · ${pending} pendiente(s)`;
+            variantClass = 'sync-indicator--offline';
+        } else if (!online) {
+            text = 'Sin conexión';
+            variantClass = 'sync-indicator--offline';
+        } else if (pending > 0) {
+            text = `${pending} pendiente(s) por sincronizar`;
+            variantClass = 'sync-indicator--warning';
+        }
+
+        syncEl.textContent = text;
+        syncEl.className = `sync-indicator ${variantClass}`;
+    }
 
     async function drainPendingQueue() {
         if (isDrainingPendingQueue) return;
@@ -35,13 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const result = await SheetsService.reintentarPendientes(25);
             if (result.sent > 0 && statusEl) {
-                statusEl.textContent = `Sincronizados ${result.sent} registros pendientes.`;
-                statusEl.className = 'form-status form-status--success';
-                setTimeout(() => {
-                    statusEl.textContent = '';
-                    statusEl.className = 'form-status';
-                }, 3000);
+                showStatus(`Sincronizados ${result.sent} registros pendientes.`);
             }
+            updateSyncIndicator();
         } catch (err) {
             console.error('[main] Error al reintentar pendientes:', err);
         } finally {
@@ -53,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const { enterEditMode } = FormController.init(form, {
         downloadButton: downloadBtn,
         statusElement:  statusEl,
+        onSyncStateChange: updateSyncIndicator,
     });
 
     // 2 — TableRenderer recibe los callbacks; edit invoca enterEditMode
@@ -64,25 +105,44 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         onDelete: async id => {
+            const record = InventoryStore.getRecords().find(r => r.id === id);
+            if (!record) return;
+
+            const confirmDelete = window.confirm(
+                `¿Seguro que deseas eliminar el registro #${record.id} (Código ${record.code})?`
+            );
+            if (!confirmDelete) return;
+
             const removed = InventoryStore.deleteRecord(id);
             if (!removed) return;
 
+            TableRenderer.render(InventoryStore.getRecords());
+            syncDownloadButton();
+
             const result = await SheetsService.enviar({ action: 'delete', uid: removed.uid });
-            if (!result.ok) {
-                alert(`Eliminado localmente, pero falló backend: ${result.error}`);
+            if (result.ok) {
+                showStatus('Registro eliminado y sincronizado.');
+            } else if (result.queued) {
+                showStatus(`Eliminado local. En cola (${result.pending} pendientes).`, true);
+            } else {
+                showStatus(`Eliminado local. Falló backend: ${result.error}`, true);
             }
 
-            TableRenderer.render(InventoryStore.getRecords());
-            downloadBtn.style.display =
-                InventoryStore.getRecords().length > 0 ? 'block' : 'none';
+            updateSyncIndicator();
         },
     });
+
+    TableRenderer.render(InventoryStore.getRecords());
+    syncDownloadButton();
 
     // 3 — Botón flotante de scroll
     ScrollController.init();
 
     // 4 — Reintentos automáticos de cola local
+    updateSyncIndicator();
     drainPendingQueue();
     window.addEventListener('online', drainPendingQueue);
+    window.addEventListener('online', updateSyncIndicator);
+    window.addEventListener('offline', updateSyncIndicator);
     setInterval(drainPendingQueue, 60000);
 });

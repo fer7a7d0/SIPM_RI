@@ -92,6 +92,18 @@ input[readonly] {
     color:      var(--color-muted);
 }
 
+input.field-error,
+select.field-error {
+    border-color: var(--color-error-text);
+    box-shadow:   0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+input.field-error:focus,
+select.field-error:focus {
+    border-color: var(--color-error-text);
+    box-shadow:   0 0 0 3px rgba(239, 68, 68, 0.3);
+}
+
 /* ---- Botones ------------------------------------------------- */
 /* Clase base para todos los botones */
 .btn {

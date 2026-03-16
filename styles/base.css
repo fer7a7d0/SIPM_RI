@@ -23,7 +23,9 @@
     --color-success-bg:       #dcfce7;
     --color-error-text:       #991b1b;
     --color-error-bg:         #fee2e2;
-    --color-highlight-start:  #dbeafe;
+    --color-highlight-start:      #dbeafe;
+    --color-highlight-field-start:#dbeafe;
+    --color-highlight-row-start:  #dbeafe;
     --color-scroll-btn:       #c9d9ff;
     --color-scroll-btn-text:  #ffffff;
 
@@ -57,7 +59,9 @@
         --color-success-bg:       #14532d;
         --color-error-text:       #fecaca;
         --color-error-bg:         #7f1d1d;
-        --color-highlight-start:  #1d4ed8;
+        --color-highlight-start:      #1d4ed8;
+        --color-highlight-field-start:#1d4ed8;
+        --color-highlight-row-start:  #1e3a8a;
         --color-scroll-btn:       #334155;
         --color-scroll-btn-text:  #e5e7eb;
 

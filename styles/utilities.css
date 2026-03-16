@@ -9,19 +9,28 @@
 }
 
 /* ---- Animación de resaltado ---------------------------------- */
-.highlight {
-    animation: highlightFade 1s ease-in-out;
+.highlight-field {
+    animation: highlightFieldFade 1s ease-in-out;
 }
 
-@keyframes highlightFade {
-    from { background-color: var(--color-highlight-start); }
+.highlight-row {
+    animation: highlightRowFade 1.2s ease-in-out;
+}
+
+@keyframes highlightFieldFade {
+    from { background-color: var(--color-highlight-field-start); }
+    to   { background-color: transparent; }
+}
+
+@keyframes highlightRowFade {
+    from { background-color: var(--color-highlight-row-start); }
     to   { background-color: transparent; }
 }
 
 /* ---- Feedback de estado del formulario ----------------------- */
 .form-status {
     min-height:    1.4rem;
-    font-size:     0.85rem;
+    font-size:     0.8rem;
     border-radius: var(--radius-sm);
     text-align:    center;
     transition:    var(--transition);
@@ -30,13 +39,69 @@
 .form-status--success {
     color:      var(--color-success-text);
     background: var(--color-success-bg);
-    padding:    8px 12px;
+    padding:    8px 10px;
 }
 
 .form-status--error {
     color:      var(--color-error-text);
     background: var(--color-error-bg);
-    padding:    8px 12px;
+    padding:    8px 10px;
+}
+
+.sync-indicator {
+    min-height:    1.4rem;
+    font-size:     0.8rem;
+    text-align:    center;
+    border-radius: var(--radius-sm);
+    padding:       8px 10px;
+    border:        1px solid var(--color-border);
+    color:         var(--color-muted);
+    background:    var(--color-readonly-bg);
+}
+
+.sync-indicator--ok {
+    color:      var(--color-success-text);
+    background: var(--color-success-bg);
+}
+
+.sync-indicator--warning {
+    color:      #92400e;
+    background: #fef3c7;
+}
+
+.sync-indicator--offline {
+    color:      var(--color-error-text);
+    background: var(--color-error-bg);
+}
+
+.toast {
+    position:      fixed;
+    left:          50%;
+    bottom:        80px;
+    transform:     translateX(-50%);
+    width:         min(92vw, 420px);
+    border-radius: var(--radius-md);
+    box-shadow:    var(--shadow-soft);
+    border:        1px solid var(--color-border);
+    background:    var(--color-card);
+    color:         var(--color-text);
+    display:       flex;
+    align-items:   center;
+    justify-content: space-between;
+    gap:           10px;
+    padding:       10px 12px;
+    z-index:       1200;
+}
+
+.toast__action {
+    border:        none;
+    border-radius: var(--radius-sm);
+    padding:       8px 10px;
+    font-size:     0.85rem;
+    font-weight:   600;
+    cursor:        pointer;
+    background:    var(--color-primary);
+    color:         var(--color-scroll-btn-text);
 }
 
 /* ---- Botón flotante de scroll -------------------------------- */

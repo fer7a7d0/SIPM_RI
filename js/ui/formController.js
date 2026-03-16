@@ -22,6 +22,7 @@ const FormController = (() => {
     let _downloadBtn;
     let _statusEl;
     let _submitBtn;
+    let _onSyncStateChange = () => {};
     let _isSubmitting = false;
 
     const F = {   // campos del formulario indexados por nombre
@@ -58,14 +59,45 @@ const FormController = (() => {
         F.product.value = entry.producto;
         F.tt.value      = `${entry.tt} – ${ttDesc}`;
 
-        F.product.classList.add('highlight');
-        F.tt.classList.add('highlight');
+        F.product.classList.add('highlight-field');
+        F.tt.classList.add('highlight-field');
         setTimeout(() => {
-            F.product.classList.remove('highlight');
-            F.tt.classList.remove('highlight');
+            F.product.classList.remove('highlight-field');
+            F.tt.classList.remove('highlight-field');
         }, 1000);
 
         F.cylinders.focus();
+    }
+
+    function _markFieldError(fieldKey) {
+        const field = F[fieldKey];
+        if (!field) return;
+        field.classList.add('field-error');
+        field.setAttribute('aria-invalid', 'true');
+    }
+
+    function _clearFieldError(fieldKey) {
+        const field = F[fieldKey];
+        if (!field) return;
+        field.classList.remove('field-error');
+        field.removeAttribute('aria-invalid');
+    }
+
+    function _validateAndPaintField(fieldKey) {
+        const message = Validators.validateField(fieldKey, _readFormData());
+        if (message) {
+            _markFieldError(fieldKey);
+            return message;
+        }
+        _clearFieldError(fieldKey);
+        return null;
+    }
+
+    function _bindLiveValidation() {
+        F.name.addEventListener('change', () => _validateAndPaintField('name'));
+        F.area.addEventListener('change', () => _validateAndPaintField('area'));
+        F.code.addEventListener('input', () => _validateAndPaintField('code'));
+        F.cylinders.addEventListener('input', () => _validateAndPaintField('cylinders'));
     }
 
     /* --- Lectura del formulario -------------------------------- */
@@ -153,10 +185,12 @@ const FormController = (() => {
 
         try {
 
-            const data  = _readFormData();
-            const error = Validators.validateFormData(data);
-            if (error) {
-                _setStatus(error, true);
+            const data = _readFormData();
+            const validation = Validators.validateFormDataDetailed(data);
+            if (validation) {
+                _markFieldError(validation.field);
+                _setStatus(validation.message, true);
+                if (F[validation.field]) F[validation.field].focus();
                 return;
             }
 
@@ -179,6 +213,7 @@ const FormController = (() => {
                         _setStatus(`Actualizado localmente, pero falló backend: ${result.error}`, true);
                     }
                 }
+                _onSyncStateChange();
                 _exitEditMode();
 
             } else {
@@ -200,6 +235,7 @@ const FormController = (() => {
                 } else {
                     _setStatus(`Guardado local, pero falló backend: ${result.error}`, true);
                 }
+                _onSyncStateChange();
             }
 
             TableRenderer.render(InventoryStore.getRecords());
@@ -233,6 +269,7 @@ const FormController = (() => {
             TableRenderer.render([]);
             _form.reset();
             _syncDownloadBtn();
+            _onSyncStateChange();
         }
     }
 
@@ -242,14 +279,17 @@ const FormController = (() => {
      * Inicializa el controlador del formulario.
      *
      * @param {HTMLFormElement} formEl
-     * @param {{ downloadButton: HTMLElement, statusElement: HTMLElement }} opts
+     * @param {{ downloadButton: HTMLElement, statusElement: HTMLElement, onSyncStateChange?: Function }} opts
      * @returns {{ enterEditMode: Function }}  Expuesto para que main.js lo pase a TableRenderer.
      */
-    function init(formEl, { downloadButton, statusElement } = {}) {
+    function init(formEl, { downloadButton, statusElement, onSyncStateChange } = {}) {
         _form        = formEl;
         _downloadBtn = downloadButton;
         _statusEl    = statusElement;
         _submitBtn   = _form.querySelector('button[type="submit"]');
+        _onSyncStateChange = typeof onSyncStateChange === 'function'
+            ? onSyncStateChange
+            : () => {};
 
         F.name      = document.getElementById('name');
         F.area      = document.getElementById('area');
@@ -259,6 +299,9 @@ const FormController = (() => {
         F.cylinders = document.getElementById('cylinders');
 
         _initDatalist();
+        _bindLiveValidation();
+        _syncDownloadBtn();
+        _onSyncStateChange();
 
         F.code.addEventListener('input', () => {
             const num = parseInt(F.code.value, 10);
