@@ -40,6 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
         recoveryBox.setAttribute('aria-hidden', 'true');
     }
 
+    function revealForm() {
+        if (!form) return;
+        setTimeout(() => {
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+    }
+
     function clearFormKeepingName() {
         const nameField = document.getElementById('name');
         const currentName = nameField ? nameField.value : '';
@@ -53,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         syncDownloadButton();
         updateSyncIndicator();
         showStatus('CSV descargado. Formulario y tabla reiniciados; Nombre conservado.');
+        revealForm();
     }
 
     function startNewSession() {
