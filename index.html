@@ -36,11 +36,20 @@
             </h1>
         </header>
 
-        <section id="session-recovery" class="session-recovery hidden" aria-live="polite">
-            <p id="session-recovery-text" class="session-recovery__text"></p>
-            <div class="session-recovery__actions">
-                <button id="resume-session-btn" type="button" class="btn btn--primary">Continuar sesión</button>
-                <button id="new-session-btn" type="button" class="btn btn--neutral">Empezar de cero</button>
+        <section id="session-recovery"
+                 class="session-recovery hidden"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-labelledby="session-recovery-title"
+                 aria-describedby="session-recovery-text"
+                 aria-live="polite">
+            <div class="session-recovery__panel">
+                <h2 id="session-recovery-title" class="session-recovery__title">Sesión recuperada</h2>
+                <p id="session-recovery-text" class="session-recovery__text"></p>
+                <div class="session-recovery__actions">
+                    <button id="resume-session-btn" type="button" class="btn btn--primary">Continuar sesión</button>
+                    <button id="new-session-btn" type="button" class="btn btn--neutral">Empezar de cero</button>
+                </div>
             </div>
         </section>
 

@@ -25,32 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusEl    = document.getElementById('form-status');
     const syncEl      = document.getElementById('sync-indicator');
     const recoveryBox = document.getElementById('session-recovery');
-    const recoveryTxt = document.getElementById('session-recovery-text');
-    const resumeBtn   = document.getElementById('resume-session-btn');
-    const newBtn      = document.getElementById('new-session-btn');
 
     let isDrainingPendingQueue = false;
-    let isRecoveryChoicePending = false;
     const STATUS_IDLE_TEXT = 'Listo para capturar';
-
-    function setInteractionLocked(isLocked) {
-        if (form) {
-            const controls = form.querySelectorAll('input, select, button, textarea');
-            controls.forEach(control => {
-                control.disabled = isLocked;
-            });
-        }
-
-        if (downloadBtn) {
-            downloadBtn.disabled = isLocked;
-        }
-
-        if (tableEl) {
-            tableEl.style.pointerEvents = isLocked ? 'none' : 'auto';
-            tableEl.style.opacity = isLocked ? '0.6' : '1';
-            tableEl.setAttribute('aria-disabled', isLocked ? 'true' : 'false');
-        }
-    }
 
     function syncDownloadButton() {
         downloadBtn.style.display =
@@ -60,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideRecoveryBanner() {
         if (!recoveryBox) return;
         recoveryBox.classList.add('hidden');
+        recoveryBox.setAttribute('aria-hidden', 'true');
     }
 
     function clearSessionKeepingName() {
@@ -81,13 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (areaField) areaField.focus();
     }
 
-    function newSessionFlow() {
-        const count = InventoryStore.getRecords().length;
-        const confirmNew = window.confirm(
-            `Se limpiarán ${count} registro(s) y todos los datos del formulario. ¿Deseas empezar de cero?`
-        );
-        if (!confirmNew) return;
-
+    function startNewSession() {
         InventoryStore.reset();
         TableRenderer.render([]);
         form.reset();
@@ -95,27 +67,41 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSyncIndicator();
         hideRecoveryBanner();
         showStatus('Sesión nueva iniciada.');
-        isRecoveryChoicePending = false;
-        setInteractionLocked(false);
 
         const nameField = document.getElementById('name');
         if (nameField) nameField.focus();
     }
 
-    function showRecoveryBannerIfNeeded() {
-        if (!recoveryBox || !recoveryTxt) return;
+    function resolveRecoveredSessionIfNeeded() {
         const count = InventoryStore.getRecords().length;
         if (!count) {
-            isRecoveryChoicePending = false;
-            setInteractionLocked(false);
             hideRecoveryBanner();
             return;
         }
 
-        recoveryTxt.textContent = `Se recuperaron ${count} registro(s) de la sesión anterior.`;
-        recoveryBox.classList.remove('hidden');
-        isRecoveryChoicePending = true;
-        setInteractionLocked(true);
+        hideRecoveryBanner();
+        const startFromZero = window.confirm(
+            `Se recuperaron ${count} registro(s) de la sesión anterior.\n\n¿Deseas iniciar de cero?\n\nAceptar: iniciar de cero\nCancelar: continuar sesión`
+        );
+
+        if (startFromZero) {
+            startNewSession();
+            return;
+        }
+
+        const records = InventoryStore.getRecords();
+        const nameField = document.getElementById('name');
+        const areaField = document.getElementById('area');
+        const codeField = document.getElementById('code');
+        const last = records[records.length - 1];
+
+        if (last) {
+            if (nameField && last.name) nameField.value = last.name;
+            if (areaField && last.area) areaField.value = last.area;
+        }
+
+        showStatus('Sesión recuperada. Continuando desde donde lo dejaste.');
+        if (codeField) codeField.focus();
     }
 
     function showStatus(message, isError = false, timeoutMs = 3500) {
@@ -227,38 +213,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     TableRenderer.render(InventoryStore.getRecords());
     syncDownloadButton();
-    showRecoveryBannerIfNeeded();
     if (statusEl) {
         statusEl.textContent = STATUS_IDLE_TEXT;
         statusEl.className = 'form-status form-status--ok';
     }
-
-    if (resumeBtn) {
-        resumeBtn.addEventListener('click', () => {
-            const records = InventoryStore.getRecords();
-            const nameField = document.getElementById('name');
-            const areaField = document.getElementById('area');
-            const codeField = document.getElementById('code');
-
-            if (records.length > 0) {
-                const last = records[records.length - 1];
-                if (nameField && last.name) nameField.value = last.name;
-                if (areaField && last.area)  areaField.value = last.area;
-            }
-
-            hideRecoveryBanner();
-            isRecoveryChoicePending = false;
-            setInteractionLocked(false);
-            showStatus('Sesión recuperada. Continuando desde donde lo dejaste.');
-            if (codeField) codeField.focus();
-        });
-    }
-
-    if (newBtn) {
-        newBtn.addEventListener('click', () => {
-            newSessionFlow();
-        });
-    }
+    resolveRecoveredSessionIfNeeded();
 
     // 3 — Botón flotante de scroll
     ScrollController.init();

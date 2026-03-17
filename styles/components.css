@@ -163,16 +163,35 @@ select.field-error:focus {
 }
 
 .session-recovery {
-    width:         100%;
-    border:        1px solid var(--color-border);
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+}
+
+.session-recovery__panel {
+    width: min(100%, 420px);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    background:    var(--color-readonly-bg);
-    padding:       12px;
-    margin-bottom: 16px;
+    background: var(--color-card);
+    box-shadow: var(--shadow-hover);
+    padding: 18px;
+}
+
+.session-recovery__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 8px;
 }
 
 .session-recovery__text {
-    font-size:   0.85rem;
+    font-size:   0.9rem;
     color:       var(--color-text);
     margin-bottom: 10px;
 }
