@@ -40,20 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
         recoveryBox.setAttribute('aria-hidden', 'true');
     }
 
-    function clearSessionKeepingName() {
+    function clearFormKeepingName() {
         const nameField = document.getElementById('name');
         const currentName = nameField ? nameField.value : '';
 
-        InventoryStore.reset();
-        TableRenderer.render([]);
         form.reset();
         if (nameField && currentName) {
             nameField.value = currentName;
         }
-        syncDownloadButton();
-        updateSyncIndicator();
-        hideRecoveryBanner();
-        showStatus('CSV descargado y sesión reiniciada. Nombre conservado; continúa desde Área.');
+        showStatus('CSV descargado. Formulario reiniciado; Nombre conservado.');
 
         const areaField = document.getElementById('area');
         if (areaField) areaField.focus();
@@ -165,11 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statusElement:  statusEl,
         onSyncStateChange: updateSyncIndicator,
         onDownloadCompleted: () => {
-            const keepResetting = window.confirm(
-                'CSV descargado. ¿Deseas reiniciar la sesión ahora? Se conservará el Nombre actual.'
-            );
-            if (!keepResetting) return;
-            clearSessionKeepingName();
+            clearFormKeepingName();
         },
     });
 
