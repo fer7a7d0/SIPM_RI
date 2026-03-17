@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showStatus('Sesión recuperada. Continuando desde donde lo dejaste.');
     }
 
-    function showStatus(message, isError = false, timeoutMs = 3500) {
+    function showStatus(message, isError = false, timeoutMs = 5000) {
         if (!statusEl) return;
         statusEl.textContent = message;
         statusEl.className = isError
