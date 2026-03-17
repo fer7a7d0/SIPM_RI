@@ -268,7 +268,9 @@ const FormController = (() => {
             _setStatus('CSV descargado. Puedes continuar o reiniciar sesión cuando lo necesites.');
         }
         if (triggerCallback) {
-            _onDownloadCompleted({ recordsCount: records.length, name, area });
+            setTimeout(() => {
+                _onDownloadCompleted({ recordsCount: records.length, name, area });
+            }, 300);
         }
         return true;
     }
