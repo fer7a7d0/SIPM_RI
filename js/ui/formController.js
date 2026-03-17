@@ -262,13 +262,25 @@ const FormController = (() => {
         const csv = CsvUtils.generarCSV(records);
         if (!csv) return false;
 
+        const recordCount = records.length;
+        const confirmed = window.confirm(
+            `¿Descargar CSV y limpiar ${recordCount} registro(s)?\n\nLos datos se borrarán del formulario y tabla después de descargarse.`
+        );
+
+        if (!confirmed) {
+            if (notify) {
+                _setStatus('Descarga cancelada.', true);
+            }
+            return false;
+        }
+
         const { name, area } = _readFormData();
 
         // En móvil, algunos navegadores pausan JS al abrir el diálogo de descarga.
         // Ejecutamos primero el callback para asegurar el reinicio del formulario.
         if (triggerCallback) {
             try {
-                _onDownloadCompleted({ recordsCount: records.length, name, area });
+                _onDownloadCompleted({ recordsCount: recordCount, name, area });
             } catch (err) {
                 console.error('[FormController] Error en onDownloadCompleted:', err);
             }
@@ -276,7 +288,7 @@ const FormController = (() => {
 
         CsvUtils.descargar(csv, CsvUtils.generarNombreArchivo(area, name));
         if (notify) {
-            _setStatus('CSV descargado. Puedes continuar o reiniciar sesión cuando lo necesites.');
+            _setStatus(`CSV descargado. ${recordCount} registro(s) eliminado(s). Nombre conservado.`);
         }
         return true;
     }

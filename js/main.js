@@ -53,9 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         syncDownloadButton();
         updateSyncIndicator();
         showStatus('CSV descargado. Formulario y tabla reiniciados; Nombre conservado.');
-
-        const areaField = document.getElementById('area');
-        if (areaField) areaField.focus();
     }
 
     function startNewSession() {
