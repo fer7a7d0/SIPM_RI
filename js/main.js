@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         hideRecoveryBanner();
         const startFromZero = window.confirm(
-            `Se recuperaron ${count} registro(s) de la sesión anterior.\n\n¿Deseas iniciar de cero?\n\nAceptar: iniciar de cero\nCancelar: continuar sesión`
+            `Se recuperaron ${count} registro(s) de la sesión anterior.\n\n¿Deseas iniciar de cero?`
         );
 
         if (startFromZero) {
