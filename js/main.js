@@ -92,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const records = InventoryStore.getRecords();
         const nameField = document.getElementById('name');
         const areaField = document.getElementById('area');
-        const codeField = document.getElementById('code');
         const last = records[records.length - 1];
 
         if (last) {
@@ -101,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         showStatus('Sesión recuperada. Continuando desde donde lo dejaste.');
-        if (codeField) codeField.focus();
     }
 
     function showStatus(message, isError = false, timeoutMs = 3500) {
