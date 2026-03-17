@@ -23,6 +23,7 @@ const FormController = (() => {
     let _statusEl;
     let _submitBtn;
     let _onSyncStateChange = () => {};
+    let _onDownloadCompleted = () => {};
     let _isSubmitting = false;
 
     const F = {   // campos del formulario indexados por nombre
@@ -256,14 +257,24 @@ const FormController = (() => {
     }
 
     /* --- Descarga CSV ----------------------------------------- */
-    function _handleDownload() {
+    function _handleDownload({ notify = true, triggerCallback = true } = {}) {
         const records = InventoryStore.getRecords();
         const csv = CsvUtils.generarCSV(records);
-        if (!csv) return;
+        if (!csv) return false;
 
         const { name, area } = _readFormData();
         CsvUtils.descargar(csv, CsvUtils.generarNombreArchivo(area, name));
-        _setStatus('CSV descargado. Puedes continuar o reiniciar sesión cuando lo necesites.');
+        if (notify) {
+            _setStatus('CSV descargado. Puedes continuar o reiniciar sesión cuando lo necesites.');
+        }
+        if (triggerCallback) {
+            _onDownloadCompleted({ recordsCount: records.length, name, area });
+        }
+        return true;
+    }
+
+    function downloadCsv() {
+        return _handleDownload({ notify: true, triggerCallback: false });
     }
 
     /* --- API pública ------------------------------------------ */
@@ -272,16 +283,19 @@ const FormController = (() => {
      * Inicializa el controlador del formulario.
      *
      * @param {HTMLFormElement} formEl
-     * @param {{ downloadButton: HTMLElement, statusElement: HTMLElement, onSyncStateChange?: Function }} opts
+     * @param {{ downloadButton: HTMLElement, statusElement: HTMLElement, onSyncStateChange?: Function, onDownloadCompleted?: Function }} opts
      * @returns {{ enterEditMode: Function }}  Expuesto para que main.js lo pase a TableRenderer.
      */
-    function init(formEl, { downloadButton, statusElement, onSyncStateChange } = {}) {
+    function init(formEl, { downloadButton, statusElement, onSyncStateChange, onDownloadCompleted } = {}) {
         _form        = formEl;
         _downloadBtn = downloadButton;
         _statusEl    = statusElement;
         _submitBtn   = _form.querySelector('button[type="submit"]');
         _onSyncStateChange = typeof onSyncStateChange === 'function'
             ? onSyncStateChange
+            : () => {};
+        _onDownloadCompleted = typeof onDownloadCompleted === 'function'
+            ? onDownloadCompleted
             : () => {};
 
         F.name      = document.getElementById('name');
@@ -306,8 +320,11 @@ const FormController = (() => {
 
         _downloadBtn.addEventListener('click', _handleDownload);
 
-        return { enterEditMode: _enterEditMode };
+        return {
+            enterEditMode: _enterEditMode,
+            downloadCsv,
+        };
     }
 
-    return { init };
+    return { init, downloadCsv };
 })();

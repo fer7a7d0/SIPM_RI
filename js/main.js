@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const form        = document.getElementById('inventory-form');
     const tableEl     = document.getElementById('table-container');
     const downloadBtn = document.getElementById('download-btn');
-    const resetBtn    = document.getElementById('reset-session-btn');
     const statusEl    = document.getElementById('form-status');
     const syncEl      = document.getElementById('sync-indicator');
     const recoveryBox = document.getElementById('session-recovery');
@@ -43,14 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
         recoveryBox.classList.add('hidden');
     }
 
-    function resetSessionFlow() {
-        const count = InventoryStore.getRecords().length;
+    function clearSessionKeepingName() {
         const nameField = document.getElementById('name');
         const currentName = nameField ? nameField.value : '';
-        const confirmReset = window.confirm(
-            `Se limpiarán ${count} registro(s) locales de esta sesión. Se conservará el Nombre actual. ¿Deseas continuar?`
-        );
-        if (!confirmReset) return;
 
         InventoryStore.reset();
         TableRenderer.render([]);
@@ -61,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         syncDownloadButton();
         updateSyncIndicator();
         hideRecoveryBanner();
-        showStatus('Sesión reiniciada. Nombre conservado; continúa desde Área.');
+        showStatus('CSV descargado y sesión reiniciada. Nombre conservado; continúa desde Área.');
 
         const areaField = document.getElementById('area');
         if (areaField) areaField.focus();
@@ -160,6 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadButton: downloadBtn,
         statusElement:  statusEl,
         onSyncStateChange: updateSyncIndicator,
+        onDownloadCompleted: () => {
+            const keepResetting = window.confirm(
+                'CSV descargado. ¿Deseas reiniciar la sesión ahora? Se conservará el Nombre actual.'
+            );
+            if (!keepResetting) return;
+            clearSessionKeepingName();
+        },
     });
 
     // 2 — TableRenderer recibe los callbacks; edit invoca enterEditMode
@@ -228,12 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (newBtn) {
         newBtn.addEventListener('click', () => {
             newSessionFlow();
-        });
-    }
-
-    if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-            resetSessionFlow();
         });
     }
 

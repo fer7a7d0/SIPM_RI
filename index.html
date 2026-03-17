@@ -90,22 +90,20 @@
                        required>
                 <datalist id="code-suggestions"></datalist>
 
-                <!-- TT y Producto: campos de solo lectura, se llenan automáticamente -->
-                <label for="tt">TT (Materia prima)</label>
-                <input type="text"
-                       id="tt"
-                       name="tt"
-                       readonly
-                       aria-readonly="true"
-                       placeholder="Se completa automáticamente">
-
-                <label for="product">Producto</label>
+                  <!-- TT y Producto: campos de solo lectura, se llenan automáticamente -->
                 <input type="text"
                        id="product"
                        name="product"
                        readonly
                        aria-readonly="true"
-                       placeholder="Se completa automáticamente">
+                       placeholder="Descripción del producto">
+
+                <input type="text"
+                       id="tt"
+                       name="tt"
+                       readonly
+                       aria-readonly="true"
+                       placeholder="TT (materia prima)">
 
                 <!-- Cantidad de cilindros -->
                 <label for="cylinders">Cilindros</label>
@@ -149,10 +147,6 @@
             <!-- Botón de exportación CSV (visible solo cuando hay registros) -->
             <button id="download-btn" class="btn btn--download" type="button" style="display:none;">
                 Descargar CSV
-            </button>
-
-            <button id="reset-session-btn" class="btn btn--primary" type="button">
-                Reiniciar sesión
             </button>
         </div>
 
