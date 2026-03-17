@@ -69,7 +69,7 @@ const CsvUtils = (() => {
         const iniciales = (nombre && nombre.trim())
             ? nombre.trim().split(/\s+/).map(p => p.charAt(0).toUpperCase()).join('')
             : 'XX';
-        return `Inventario_${fecha}_${areaStr}_${iniciales}.csv`;
+            return `Inventario_${fecha}_Área ${areaStr}_${iniciales}.csv`;
     }
 
     /**
