@@ -44,11 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const nameField = document.getElementById('name');
         const currentName = nameField ? nameField.value : '';
 
+        InventoryStore.reset();
+        TableRenderer.render([]);
         form.reset();
         if (nameField && currentName) {
             nameField.value = currentName;
         }
-        showStatus('CSV descargado. Formulario reiniciado; Nombre conservado.');
+        syncDownloadButton();
+        updateSyncIndicator();
+        showStatus('CSV descargado. Formulario y tabla reiniciados; Nombre conservado.');
 
         const areaField = document.getElementById('area');
         if (areaField) areaField.focus();

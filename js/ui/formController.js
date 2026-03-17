@@ -263,14 +263,20 @@ const FormController = (() => {
         if (!csv) return false;
 
         const { name, area } = _readFormData();
+
+        // En móvil, algunos navegadores pausan JS al abrir el diálogo de descarga.
+        // Ejecutamos primero el callback para asegurar el reinicio del formulario.
+        if (triggerCallback) {
+            try {
+                _onDownloadCompleted({ recordsCount: records.length, name, area });
+            } catch (err) {
+                console.error('[FormController] Error en onDownloadCompleted:', err);
+            }
+        }
+
         CsvUtils.descargar(csv, CsvUtils.generarNombreArchivo(area, name));
         if (notify) {
             _setStatus('CSV descargado. Puedes continuar o reiniciar sesión cuando lo necesites.');
-        }
-        if (triggerCallback) {
-            setTimeout(() => {
-                _onDownloadCompleted({ recordsCount: records.length, name, area });
-            }, 300);
         }
         return true;
     }
