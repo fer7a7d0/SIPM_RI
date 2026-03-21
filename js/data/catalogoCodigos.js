@@ -792,4 +792,10 @@ const catalogoCodigos = {
     53491: { producto: "CRYO N2 2PPM /AR BAL", tt: "0" },
     3001174: { producto: "MEZCLA H2O 75 PPM, N2 BAL. CIL. 30 AL", tt: "0" },
     3002194: { producto: "MEZCLA NO2 100 PPM,N2 BAL.  CIL. 30AL", tt: "0" },
+    53264: { producto: "NO 700 PPM / CO 700 PPM / N2 BAL", tt: "0" },
+    3002515: { producto: "MEZCLA CO 350 PPM, NO 175 PPM, N2 BAL, CIL 30 AL", tt: "0" },
+    3002216: { producto: "MEZCLA CO 700 PPM, NO 300 PPM, N2 BAL, CIL 30 AL", tt: "0" },
+
+
+    
 };
