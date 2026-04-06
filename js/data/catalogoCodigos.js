@@ -805,5 +805,5 @@ const catalogoCodigos = {
     3000035: { producto: "CRYO NO 5 PMM / CO2 BAL", tt: "GB" }, 
     32134: { producto: "NITRÓGENO 4.8 6 M3 B", tt: "GB" },
 
-
+};
 
