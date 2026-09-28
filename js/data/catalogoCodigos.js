@@ -804,6 +804,25 @@ const catalogoCodigos = {
     53249: { producto: "H2 1 % / CO2 BAL", tt: "0" },
     3000035: { producto: "CRYO NO 5 PMM / CO2 BAL", tt: "0" }, 
     32134: { producto: "NITRÓGENO 4.8 6 M3 B", tt: "212" },
+    3002399: { producto: "MEZCLA CO 100PPM N2 VAL CANISTER 34 L", tt: "0" },
+    53399: { producto: "R600 LP110/LP239 - 100 LB", tt: "0" },
+    53337: { producto: "CRYO HIDROGENO UAP (M3)", tt: "0" },
+    41059: { producto: "CARGA DE H2 7% / N2 BAL", tt: "0" },
+    3002330: { producto: "MEZCLA O2 50% VOL, CO2 1.5% VOL, N2 BAL, CIL 7 AL", tt: "0" },
+    3002331: { producto: "MEZCLA O2 20% VOL, N2 BAL, CIL 7 AL", tt: "0" },
+    53239: { producto: "NITROGENO RESEARCH 5.5", tt: "0" },
+    3002305: { producto: "MEZCLA C6H14 0.5%, HE BAL, CIL 30 AL", tt: "0" },
+    3002302: { producto: "MEZCLA C4H10 1%, HE BAL, CIL 30 AL", tt: "0" },
+    3002303: { producto: "MEZCLA C5H12 1%, HE BAL, CIL 30 AL", tt: "0" },
+    3000603: { producto: "BENCENO 50 PPM / ACETALDEHIDO 500 PPM / MET", tt: "0" },
+    3001478: { producto: "CRYO CO2 5.5 CIL", tt: "0" },
+    33497: { producto: "CARGA DE O2 24% / N2 BAL", tt: "0" },
+    3002304: { producto: "MEZCLA C3H8 1%, HE BAL, CIL 30 AL", tt: "0" },
+    3002254: { producto: "CRYO CO2 4.8 MTY CIL 30 AL", tt: "0" },
+    3001049: { producto: "He 8% / BAL N2", tt: "0" },
+
+
+
 
 };
 
